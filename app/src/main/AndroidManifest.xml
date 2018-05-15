@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.luiz.teacherassistent">
+
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <meta-data
+        android:name="com.google.android.gms.vision.DEPEDENCIES"
+        android:value="ocr" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icone"
+        android:roundIcon="@drawable/icone"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:versionName="TeacherAssistent"
+        tools:ignore="HardcodedDebugMode">
+        <activity android:name=".Interface.Menus.MenuPrincipal">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Interface.LoginUsuarios.LoginAluno" />
+        <activity android:name=".Interface.LoginUsuarios.LoginProfessor" />
+        <activity android:name=".Interface.CadastroUsuarios.CadastroAluno" />
+        <activity android:name=".Interface.Menus.MenuAluno" />
+        <activity android:name=".Interface.CadastroQuestao.CadastrarEnunciado" />
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno" />
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarResolucaoAluno" />
+        <activity android:name=".Interface.CorrigirQuestao.TelaInstrucaoProfessor" />
+        <activity android:name=".Interface.CorrigirQuestao.TelaInstrucaoAluno" />
+        <activity android:name=".Interface.CadastroQuestao.InstrucaoCadastro" />
+        <activity android:name=".Interface.Menus.MenuProfessor" />
+        <activity android:name=".Interface.CadastroUsuarios.CadastroProfessor" />
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoProfessor" />
+        <activity android:name=".Interface.CadastroQuestao.CadastrarResolucao" />
+        <activity android:name=".Interface.ForumUsuarios.ForumAluno" />
+        <activity android:name=".Interface.ForumUsuarios.ForumProfessor" />
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarResolucaoProfessor" />
+        <activity android:name=".Interface.CadastroUsuarios.InstrucaoCadastroProfessor"/>
+    </application>
+
+</manifest>

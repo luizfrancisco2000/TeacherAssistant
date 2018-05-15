@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ResolucaoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resolução: " />
+
+        <EditText
+            android:id="@+id/ResolucaoEdit"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/FotoResolucao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Foto" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Foto Selecionada: "
+            />
+
+        <ImageView
+            android:id="@+id/imageResourceID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fotos" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ConcluirProcesso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:clickable="true"
+            app:backgroundTint="?attr/colorPrimary"
+            app:srcCompat="@drawable/ic_menu_send" />
+
+    </LinearLayout>
+</ScrollView>

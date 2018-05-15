@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="vertical">//Esse Layout pesa 50% do Layout total
+
+        <Button
+            android:id="@+id/butCorrigirquest"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="Corrigir Questões" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="horizontal">//Esse Layout pesa 50% do Layout total
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:text="Fórum"
+            android:id="@+id/butonForumAluno"
+            />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:text="Lista de Exercício"
+            />
+
+    </LinearLayout>
+</LinearLayout>
