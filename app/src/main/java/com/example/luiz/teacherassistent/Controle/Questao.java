@@ -25,7 +25,7 @@ public class Questao {
     }
     public void salvar(){
         mRef = ConfiguracaoDataBase.getFirebase();
-        mRef.child("questao").child(String.valueOf(materia+codigo)).setValue(this);
+        mRef.child("questao").child(String.valueOf(materia+enunciado)).setValue(this);
     }
     @Exclude
     public Map<String, Object> toMap(){
@@ -36,21 +36,8 @@ public class Questao {
         hashMapQuestao.put("resolucao", getResolucao());
         return hashMapQuestao;
     }
-    public void buscar() {
-        ConfiguracaoDataBase.getFirebase().child(getCodigo());
-        ValueEventListener post = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Questao questao = dataSnapshot.getValue(Questao.class);
-                questao.exportResolucao();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-        mRef.addValueEventListener(post);
-    }
-        public void setMateria(String materia) {
+
+    public void setMateria(String materia) {
         this.materia = materia;
     }
 

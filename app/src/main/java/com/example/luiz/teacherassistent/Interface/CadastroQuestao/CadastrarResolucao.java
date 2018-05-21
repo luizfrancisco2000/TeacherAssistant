@@ -62,7 +62,7 @@ public class CadastrarResolucao extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 questao.convertStringForArray(editResolucao.getText().toString());
-                questao.setCodigo(""+Math.random());
+                questao.salvar();
                 Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
                 Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
@@ -91,7 +91,6 @@ public class CadastrarResolucao extends AppCompatActivity {
             imagemResolucao.setDrawingCacheEnabled(true);
             imagemResolucao.buildDrawingCache();
             imageGaleria = (BitmapFactory.decodeFile(picturePath));
-            imagemResolucao.setImageBitmap(imageGaleria);
             ocrResolucao = new TextRecognizer.Builder(imagemResolucao.getContext()).build();
             if(!ocrResolucao.isOperational()){
                 Log.w("Cadastro","Detector dependecies are not yet avaiable");
@@ -106,14 +105,8 @@ public class CadastrarResolucao extends AppCompatActivity {
                 }
                 editResolucao.setText(text);
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                imageGaleria.setHeight(100);
-                imageGaleria.setWidth(100);
-                Log.w("CadaastroResolucao","Alteração Feita com sucesso");
-            }
-            else{
-                Log.w("CadastroResolucao","Error 404");
-            }
+            Bitmap bitmapReduzido = Bitmap.createScaledBitmap(imageGaleria, 100, 100, true);
+            imagemResolucao.setImageBitmap(bitmapReduzido);
         }
     }
 }

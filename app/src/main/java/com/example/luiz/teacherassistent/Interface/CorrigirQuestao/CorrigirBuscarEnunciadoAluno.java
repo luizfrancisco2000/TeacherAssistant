@@ -26,11 +26,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Aluno;
+import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.InstrucaoCadastroProfessor;
+import com.example.luiz.teacherassistent.Interface.LoginUsuarios.LoginProfessor;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
+import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Chico on 28/02/2018.
@@ -79,23 +88,26 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         continuarResolucao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                questao = new Questao();
-                questao.setEnunciado(editEnunciado.getText().toString());
-                //professor.setAtivo(false);
-                if(radioFisica.isChecked()) {
-                    questao.setMateria("fisica");
-                }else if(radioMatematica.isChecked()){
-                    questao.setMateria("matematica");
-                }else if(radioQuimica.isChecked()){
-                    questao.setMateria("quimica");
-                }else{
-                    disciplina.setText(disciplina.getText()+"     Campo Obrigatório");
-                    disciplina.setTextColor(Color.RED);
-                }
-                questao.buscar();
+                do {
+                    questao = new Questao();
+                    questao.setEnunciado(editEnunciado.getText().toString());
+                    //professor.setAtivo(false);
+                    if (radioFisica.isChecked()) {
+                        questao.setMateria("fisica");
+                    } else if (radioMatematica.isChecked()) {
+                        questao.setMateria("matematica");
+                    } else if (radioQuimica.isChecked()) {
+                        questao.setMateria("quimica");
+                    } else {
+                        disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
+                        disciplina.setTextColor(Color.RED);
+                    }
+                }while(!questao.getMateria().equals(null));
+                buscar();
                 if(questao!=null) {
                     Toast.makeText(CorrigirBuscarEnunciadoAluno.this, "Sinto Muito, questão não cadastrada :(", Toast.LENGTH_SHORT).show();
                 }else{
+                    questao.exportResolucao();
                     Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this,CorrigirBuscarResolucaoAluno.class);
                     startActivity(intent);
                 }
@@ -144,5 +156,30 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
             }
         }
 
+    }
+    public void buscar() {
+        DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
+        salve.child("questao").child(questao.getMateria()+questao.getEnunciado()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    questao = dataSnapshot.getValue(Questao.class);
+                    Log.d("Cidadão2",questao.getCodigo());
+                    abrirTelaPrincipal(questao);
+                }
+                else {
+                    Log.d("Erro", "Mais uma vez");
+                    questao=null;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Erro", databaseError.getMessage());
+            }
+        });
+    }
+    private void abrirTelaPrincipal(Questao questao) {
+        this.questao=questao;
     }
 }

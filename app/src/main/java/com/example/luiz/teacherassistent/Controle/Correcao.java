@@ -1,7 +1,7 @@
 package com.example.luiz.teacherassistent.Controle;
 
 
-import java.util.ArrayList;
+        import java.util.ArrayList;
 
 /**
  * Created by Chico on 26/03/2018.
@@ -25,29 +25,26 @@ public class Correcao {
                 resolucaoUser.add(resolucao.subSequence(auxiliar,i).toString());
                 auxiliar=i+1;
             }
-    }
+        }
     }
 
-    public boolean corrigir(){
+    public String corrigir(){
         String status = null;
-        String erro;
+        String erro = null;
         for (int i =0; i<resolucaoCorreta.size();i++){
-            for(int j=0; j<resolucaoUser.size();j++){
-                if(resolucaoCorreta.get(i).equals(resolucaoUser.get(i))){
-                    i++;
-                    status="tá certinho";
+            do {
+                for (int j = 0; j < resolucaoUser.size(); j++) {
+                    if (resolucaoCorreta.get(i).equals(resolucaoUser.get(i))) {
+                        i++;
+                        status = "tá certinho";
+                    } else {
+                        status = null;
+                        erro = "" + j;
+                    }
                 }
-                else{
-                    status=null;
-                    erro = "Erro na linha"+j;
-                }
-            }
+            }while(!erro.equals(null));
+            i=resolucaoCorreta.size();
         }
-        if(status.equals(null)){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return erro;
     }
 }
