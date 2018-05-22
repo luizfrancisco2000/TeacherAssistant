@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"> //Esse Layout pesa 50% do Layout total
         <Button
+            android:background="@drawable/aluno.png"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:text="Aluno"
@@ -30,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:text="Professor"
+            android:background="@drawable/professor.png"
             android:id="@+id/Professor"
             />
 
