@@ -15,7 +15,7 @@ public class TelaInstrucaoProfessor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_instrucoes);
-        continuar = (FloatingActionButton) findViewById(R.id.ContinuarFuncao);
+        continuar = (FloatingActionButton) findViewById(R.id.ContinuarAlgumaCoisa);
         continuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

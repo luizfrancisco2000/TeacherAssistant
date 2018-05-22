@@ -1,5 +1,8 @@
 package com.example.luiz.teacherassistent.Controle;
 
+import android.annotation.SuppressLint;
+import android.support.annotation.TransitionRes;
+
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
@@ -14,6 +17,10 @@ import java.util.Map;
 public class Professor extends Usuario {
     String materia;
     boolean ativo;
+
+
+    private static Professor getInstance;
+
     public Professor(){
     }
     public void salvar(){
@@ -47,5 +54,15 @@ public class Professor extends Usuario {
 
     public boolean getAtivo() {
         return ativo;
+    }
+
+    public static Professor getInstance(){
+        if(getInstance==null){
+            getInstance = new Professor();
+        }
+        return getInstance;
+    }
+    public static void setInstance(Professor professor){
+        getInstance = professor;
     }
 }

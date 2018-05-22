@@ -1,10 +1,13 @@
 package com.example.luiz.teacherassistent.Controle;
 
+import android.util.Log;
+
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -16,23 +19,24 @@ import java.util.Map;
  */
 
 public class Questao {
-    String materia;
-    String enunciado;
-    String codigo;
-    ArrayList<String> resolucao;
-    DatabaseReference mRef;
+    private String materia;
+    private String enunciado;
+    private String codigo;
+    private ArrayList<String> resolucao;
+    private static Questao getInstance;
+
+    private Correcao correcao;
     public Questao() {
     }
     public void salvar(){
-        mRef = ConfiguracaoDataBase.getFirebase();
-        mRef.child("questao").child(String.valueOf(materia+enunciado)).setValue(this);
+        DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
+        salve.child("questao").child(String.valueOf(getMateria())).setValue(this);
     }
     @Exclude
     public Map<String, Object> toMap(){
         HashMap<String, Object> hashMapQuestao = new HashMap<>();
-        hashMapQuestao.put("codigo",getCodigo());
-        hashMapQuestao.put("enunciado", getEnunciado());
         hashMapQuestao.put("materia", getMateria());
+        hashMapQuestao.put("enunciado", getEnunciado());
         hashMapQuestao.put("resolucao", getResolucao());
         return hashMapQuestao;
     }
@@ -53,16 +57,17 @@ public class Questao {
         this.resolucao = resolucao;
     }
     public void convertStringForArray(String correta){
-        int auxiliar;
+        int auxiliar=0;
+        ArrayList<String> res = new ArrayList<>();
         for(int i = 0; i<correta.length();i++){
-            int j=0;
-            auxiliar=0;
             if(correta.charAt(i)=='\n'){
-                resolucao.add(correta.subSequence(auxiliar,i).toString());
-                j++;
+                String texto = correta.subSequence(auxiliar,i).toString();
                 auxiliar=i+1;
+                res.add(texto);
+                i++;
             }
         }
+        resolucao = res;
     }
     public String getMateria() {
         return materia;
@@ -80,8 +85,18 @@ public class Questao {
         return resolucao;
     }
 
-    public void exportResolucao(){
-        Correcao correcao  = new Correcao();
+    public Correcao exportResolucao(){
+        correcao = new Correcao();
         correcao.setResolucaoCorreta(getResolucao());
+        return correcao;
+    }
+    public static Questao getInstance(){
+        if(getInstance==null){
+            getInstance = new Questao();
+        }
+        return getInstance;
+    }
+    public static void setInstance(Questao questao){
+        getInstance = questao;
     }
 }

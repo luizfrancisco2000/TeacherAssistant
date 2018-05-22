@@ -110,6 +110,7 @@ public class LoginProfessor extends AppCompatActivity {
             Intent intent = new Intent(LoginProfessor.this, MenuProfessor.class);
             startActivity(intent);
             professor = professorLogado;
+            Professor.setInstance(professor);
         }
         else{
             Intent intent = new Intent(LoginProfessor.this, InstrucaoCadastroProfessor.class);

@@ -51,6 +51,7 @@ public class CadastrarResolucao extends AppCompatActivity {
         editResolucao = (EditText) findViewById(R.id.ResolucaoEdit);
         imagemResolucao = (ImageView) findViewById(R.id.imageResourceID);
         concluirCadastro = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
+        questao = Questao.getInstance();
         fotoResolucao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +63,7 @@ public class CadastrarResolucao extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 questao.convertStringForArray(editResolucao.getText().toString());
+                Questao.setInstance(questao);
                 questao.salvar();
                 Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
                 Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
@@ -28,16 +29,14 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
-    private Correcao correcao;
+    Correcao correcao;
     private EditText resolucaoAluno;
     private ImageView fotoResolucaoAluno;
     private FloatingActionButton concluir;
     private Button buttonEscolherFoto;
     private Bitmap imageGaleria;
     private TextRecognizer ocrResolucao;
-    private Button forum;
-    private FloatingActionButton acao;
-    private EditText erro;
+
     protected final int GALERIA_IMAGENS = 1;
     private final int  PERMISSAO_REQUEST =2;
     @Override
@@ -49,6 +48,7 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         buttonEscolherFoto = (Button) findViewById(R.id.FotoResolucao);
         fotoResolucaoAluno = (ImageView) findViewById(R.id.imageResourceID);
         concluir = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
+        correcao = Correcao.getInstance();
         fotoResolucaoAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,35 +67,15 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 correcao.setResolucaoUser(resolucaoAluno.getText().toString());
-                if(correcao.corrigir().equals(null)){
-                    setContentView(R.layout.layout_acerto);
-                    acao = (FloatingActionButton) findViewById(R.id.ConcluirProcesso1);
-                    acao.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, MenuAluno.class);
-                            startActivity(intent);
-                        }
-                    });
+                String erroString = correcao.corrigir();
+                if(erroString.equals(null)){
+                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, CorretoAluno.class);
+                    startActivity(intent);
                 }
                 else{
-                    setContentView(R.layout.layout_erro);
-                    acao = (FloatingActionButton) findViewById(R.id.ConcluirProcesso2);
-                    forum = (Button) findViewById(R.id.butonForumAluno);
-                    acao.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, MenuAluno.class);
-                            startActivity(intent);
-                        }
-                    });
-                    forum.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ForumAluno.class);
-                            startActivity(intent);
-                        }
-                    });
+                    Correcao.setInstance(correcao);
+                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ErradoAluno.class);
+                    startActivity(intent);
                 }
 
             }

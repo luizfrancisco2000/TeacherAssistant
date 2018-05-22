@@ -1,40 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_weight="1"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"> //Esse Layout pesa 50% do Layout total
+        android:layout_weight="0.5"
+        android:orientation="vertical">//Esse Layout pesa 50% do Layout total
+
         <Button
-            android:background="@drawable/aluno"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:text="Aluno"
             android:id="@+id/aluno"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"> //Esse Layout pesa 50% do Layout total
-
-        <Button
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:text="Professor"
-            android:background="@drawable/professor"
-            android:id="@+id/Professor"
-            />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@drawable/aluno" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">//Esse Layout pesa 50% do Layout total
+
+            <Button
+                android:id="@+id/Professor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/professor" />
+
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

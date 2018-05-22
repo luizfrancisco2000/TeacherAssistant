@@ -15,11 +15,11 @@ public class TelaInstrucaoAluno extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_instrucoes);
-        continuar = (FloatingActionButton) findViewById(R.id.ContinuarFuncao);
+        continuar = (FloatingActionButton) findViewById(R.id.ContinuarAlgumaCoisa);
         continuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TelaInstrucaoAluno.this, CadastrarEnunciado.class);
+                Intent intent = new Intent(TelaInstrucaoAluno.this, CorrigirBuscarEnunciadoAluno.class);
                 startActivity(intent);
             }
         });

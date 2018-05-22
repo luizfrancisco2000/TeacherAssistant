@@ -3,106 +3,113 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_weight="1">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Foto de Perfil:"
-            android:layout_gravity="center"
-            android:textSize="18dp"
-            />
-
-        <ImageView
-            android:id="@+id/fotoCadAluno"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/fotos" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nome:"
-            android:textSize="18dp"
-            />
-
-        <EditText
-            android:id="@+id/nomeCadAluno"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:tag="Nome" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email:"
-            android:textSize="18dp"
-            />
-
-        <EditText
-            android:id="@+id/emailCadAluno"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:tag="Email" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="login:"
-            android:textSize="18dp"
-            />
-
-        <EditText
-            android:id="@+id/loginCadAluno"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="Login" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Serie"
-            android:textSize="18dp"
-            />
-
-        <EditText
-            android:id="@+id/serieCadAluno"
-            android:layout_width="33dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:selectAllOnFocus="true"
-            android:tag="Serie" />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="senha"
-            android:textSize="18dp"
-            />
-
-        <EditText
-            android:id="@+id/senhaCadAluno"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/cancelarCadAluno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancelar" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Foto de Perfil:"
+                    android:layout_gravity="center"
+                    android:textSize="18dp"
+                    />
 
-            <Button
-                android:id="@+id/confirmarCadAluno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirmar" />
-        </LinearLayout>
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/fotoCadAluno"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/fotos" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome:"
+                    android:textSize="18dp"
+                    />
+
+                <EditText
+                    android:id="@+id/nomeCadAluno"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="Nome" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email:"
+                    android:textSize="18dp"
+                    />
+
+                <EditText
+                    android:id="@+id/emailCadAluno"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="Email" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="login:"
+                    android:textSize="18dp"
+                    />
+
+                <EditText
+                    android:id="@+id/loginCadAluno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="Login" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Serie"
+                    android:textSize="18dp"
+                    />
+
+                <EditText
+                    android:id="@+id/serieCadAluno"
+                    android:layout_width="33dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:selectAllOnFocus="true"
+                    android:tag="Serie" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="senha"
+                    android:textSize="18dp"
+                    />
+
+                <EditText
+                    android:id="@+id/senhaCadAluno"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    >
+
+                    <Button
+                        android:id="@+id/cancelarCadAluno"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cancelar" />
+
+                    <Button
+                        android:id="@+id/confirmarCadAluno"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Confirmar" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 </ScrollView>

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Aluno;
+import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
 import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.InstrucaoCadastroProfessor;
@@ -65,12 +66,12 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     private TextRecognizer ocrEnunciado;
     private Bitmap imageGaleria;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.layout_enunciado);
         fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
         editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
-        continuarResolucao = (FloatingActionButton) findViewById(R.id.ContinuarProcesso);
+        continuarResolucao = (FloatingActionButton) findViewById(R.id.ContinuarProcessoCad);
         imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
         radioFisica = (RadioButton) findViewById(R.id.radioFisica);
         radioMatematica = (RadioButton) findViewById(R.id.radioMatematica);
@@ -88,7 +89,6 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         continuarResolucao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                do {
                     questao = new Questao();
                     questao.setEnunciado(editEnunciado.getText().toString());
                     //professor.setAtivo(false);
@@ -101,16 +101,9 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                     } else {
                         disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
                         disciplina.setTextColor(Color.RED);
+                        onCreate(savedInstanceState);
                     }
-                }while(!questao.getMateria().equals(null));
-                buscar();
-                if(questao!=null) {
-                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, "Sinto Muito, questão não cadastrada :(", Toast.LENGTH_SHORT).show();
-                }else{
-                    questao.exportResolucao();
-                    Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this,CorrigirBuscarResolucaoAluno.class);
-                    startActivity(intent);
-                }
+                    buscar();
             }
         });
     }
@@ -159,12 +152,12 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     }
     public void buscar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(questao.getMateria()+questao.getEnunciado()).addValueEventListener(new ValueEventListener() {
+        salve.child("questao").child(questao.getMateria()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     questao = dataSnapshot.getValue(Questao.class);
-                    Log.d("Cidadão2",questao.getCodigo());
+                    Log.d("Cidadão2",questao.getResolucao().toString());
                     abrirTelaPrincipal(questao);
                 }
                 else {
@@ -181,5 +174,9 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     }
     private void abrirTelaPrincipal(Questao questao) {
         this.questao=questao;
+        Correcao correcao = this.questao.exportResolucao();
+        Correcao.setInstance(correcao);
+        Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this,CorrigirBuscarResolucaoAluno.class);
+        startActivity(intent);
     }
 }

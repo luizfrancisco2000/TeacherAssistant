@@ -11,7 +11,9 @@ public class Correcao {
     private ArrayList<String> resolucaoCorreta;
     private ArrayList<String> resolucaoUser;
     private  int auxiliar;
+    private String erro;
 
+    private static Correcao getInstance;
     public Correcao(){
 
     }
@@ -19,13 +21,15 @@ public class Correcao {
         this.resolucaoCorreta=correta;
     }
     public void setResolucaoUser(String resolucao) {
+        ArrayList<String> res = new ArrayList<>();
         for(int i = 0; i<resolucao.length();i++){
             auxiliar=0;
             if(resolucao.charAt(i)=='\n'){
-                resolucaoUser.add(resolucao.subSequence(auxiliar,i).toString());
+                res.add(resolucao.subSequence(auxiliar,i).toString());
                 auxiliar=i+1;
             }
         }
+        resolucaoUser = res;
     }
 
     public String corrigir(){
@@ -45,6 +49,16 @@ public class Correcao {
             }while(!erro.equals(null));
             i=resolucaoCorreta.size();
         }
+        this.erro=erro;
         return erro;
+    }
+    public static Correcao getInstance(){
+        if(getInstance==null){
+            getInstance = new Correcao();
+        }
+        return getInstance;
+    }
+    public static void setInstance(Correcao correcao){
+        getInstance = correcao;
     }
 }

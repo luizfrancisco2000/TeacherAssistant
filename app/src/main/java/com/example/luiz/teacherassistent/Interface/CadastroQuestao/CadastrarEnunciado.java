@@ -24,9 +24,12 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
 import com.example.luiz.teacherassistent.Interface.LoginUsuarios.LoginProfessor;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
 import com.google.android.gms.vision.Frame;
@@ -35,7 +38,10 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * Created by Chico on 28/02/2018.
@@ -55,18 +61,18 @@ public class CadastrarEnunciado extends AppCompatActivity{
     private TextView disciplina;
     //constantes e variaveis
     private final int  PERMISSAO_REQUEST =2;
-    private Questao questao;
-    LoginProfessor log;
+    Questao questao;
+    Professor professor;
     // ferramentas
     private TextRecognizer ocrEnunciado;
     private Bitmap imageGaleria;
     @Override
-    protected void onCreate(Bundle onSaveInstanceState){
+    protected void onCreate(final Bundle onSaveInstanceState){
         super.onCreate(onSaveInstanceState);
         super.setContentView(R.layout.layout_enunciado);
         fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
         editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
-        continuarCadastro = (FloatingActionButton) findViewById(R.id.ContinuarProcesso);
+        continuarCadastro = (FloatingActionButton) findViewById(R.id.ContinuarProcessoCad);
         imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
         radioFisica = (RadioButton) findViewById(R.id.radioFisica);
         radioMatematica = (RadioButton) findViewById(R.id.radioMatematica);
@@ -81,12 +87,21 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 startActivityForResult(intent,GALERIA_IMAGENS);
             }
         });
-        if(log.professor.getMateria().equals("fisica")){
-            radioFisica.setSelected(true);
-        }else if(log.professor.getMateria().equals("quimica")){
-            radioQuimica.setSelected(true);
-        }else if(log.professor.getMateria().equals("matematica")){
-            radioMatematica.setSelected(true);
+        professor = Professor.getInstance();
+
+        Log.d("Teste",professor.getMateria());
+        if(!professor.equals(null)){
+            if(professor.getMateria().equals("fisica")){
+                radioFisica.setChecked(true);
+            }else if(professor.getMateria().equals("quimica")){
+                radioFisica.setChecked(true);
+            }else if(professor.getMateria().equals("matematica")){
+                radioFisica.setChecked(true);
+            }
+        }
+        else{
+            Intent intent = new Intent(CadastrarEnunciado.this, MenuProfessor.class);
+            startActivity(intent);
         }
         continuarCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,75 +109,20 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 questao = new Questao();
                 questao.setEnunciado(editEnunciado.getText().toString());
                 //professor.setAtivo(false);
-                do{
                 if (radioFisica.isChecked()) {
                     questao.setMateria("fisica");
-                    if (questao.getMateria().equals(log.professor.getMateria())) {
-                        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                        startActivity(intent);
-                    } else {
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                        alerta.setTitle("Atenção").setMessage("Você não é professor da disciplina de" + questao.getMateria() + "\nDeseja continuar?");
-                        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (questao.getMateria().equals(log.professor.getMateria())) {
-                                    buscarBancoDeDados();
-                                }
-                            }
-                        });
-                        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                    }
-                } else if (radioMatematica.isChecked()) {
-                    if (questao.getMateria().equals(log.professor.getMateria())) {
-                        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                        startActivity(intent);
-                    } else {
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                        alerta.setTitle("Atenção").setMessage("Você não é professor da disciplina de" + questao.getMateria() + "\nDeseja continuar?");
-                        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                buscarBancoDeDados();
-                            }
-                        });
-                        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                    }
+                    newTela();
+                }else if (radioMatematica.isChecked()) {
+                    questao.setMateria("matematica");
+                    newTela();
                 } else if (radioQuimica.isChecked()) {
-                    if (questao.getMateria().equals(log.professor.getMateria())) {
-                        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                        startActivity(intent);
-                    } else {
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                        alerta.setTitle("Atenção").setMessage("Você não é professor da disciplina de" + questao.getMateria() + "\nDeseja continuar?");
-                        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                buscarBancoDeDados();
-                            }
-                        });
-                        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                    }
+                    questao.setMateria("quimica");
+                    newTela();
                 } else {
                     disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
                     disciplina.setTextColor(Color.RED);
+                    onCreate(onSaveInstanceState);
                 }
-            }while(!questao.getMateria().equals(null));
             }
         });
     }
@@ -195,7 +155,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 }
                 editEnunciado.setText(text);
             }
-            Bitmap bitmapReduzido = Bitmap.createScaledBitmap(imageGaleria, 100, 100, true);
+            Bitmap bitmapReduzido = Bitmap.createScaledBitmap(imageGaleria, 300, 300, true);
             imagemEnunciado.setImageBitmap(bitmapReduzido);
         }
     }
@@ -209,38 +169,47 @@ public class CadastrarEnunciado extends AppCompatActivity{
         }
 
     }
-    public void buscarBancoDeDados(){
-            DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-            salve.child("questao").child(questao.getMateria()+questao.getEnunciado()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(final DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                        alerta.setTitle("Atenção").setMessage("Questão já cadastrada\n deseja continuar?");
-                        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                                startActivity(intent);
-                            }
-                        });
-                        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                    }
-                    else {
-                        Log.d("Erro", "Mais uma vez");
-                    }
+    /*public void buscarBancoDeDados(){
+        DatabaseReference mRef =  FirebaseDatabase.getInstance().getReference();
+        Log.d("Erro1", questao.getEnunciado());
+        mRef.child("questao").child(questao.getMateria()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Questao questao = dataSnapshot.getValue(Questao.class);
+                    erroDeBusca(questao);
                 }
+                else{
+                    Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.d("Erro", databaseError.getMessage());
-                }
-            });
+            }
+        });
     }
-
+    private void erroDeBusca(Questao questao) {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+        alerta.setTitle("Atenção").setMessage("Questao já cadsatrada" + questao.getMateria() + "\nDeseja continuar?");
+        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+                startActivity(intent);
+            }
+        });
+        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+    }*/
+    public void newTela(){
+        Questao.setInstance(questao);
+        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+        startActivity(intent);
+    }
 }
