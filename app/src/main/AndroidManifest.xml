@@ -29,7 +29,8 @@
         </activity>
         <activity android:name=".Interface.LoginUsuarios.LoginAluno" />
         <activity android:name=".Interface.LoginUsuarios.LoginProfessor" />
-        <activity android:name=".Interface.CadastroUsuarios.CadastroAluno" />
+        <activity android:name=".Interface.CorrigirQuestao.ErradoAluno" />
+        <activity android:name=".Interface.CorrigirQuestao.CorretoAluno"/>
         <activity android:name=".Interface.Menus.MenuAluno" />
         <activity android:name=".Interface.CadastroQuestao.CadastrarEnunciado" />
         <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno" />

@@ -7,7 +7,7 @@
     >
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/ConcluirProcesso1"
+        android:id="@+id/ConcluirCorrecao1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

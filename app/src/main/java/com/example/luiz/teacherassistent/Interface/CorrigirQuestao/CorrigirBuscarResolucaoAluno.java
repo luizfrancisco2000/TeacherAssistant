@@ -66,15 +66,17 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         concluir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                correcao.setResolucaoUser(resolucaoAluno.getText().toString());
+                String aux = resolucaoAluno.getText().toString();
+                correcao.convertStringForArray(aux);
                 String erroString = correcao.corrigir();
-                if(erroString.equals(null)){
-                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, CorretoAluno.class);
+                if(!erroString.equals("")){
+                    correcao.setErro(erroString);
+                    Correcao.setInstance(correcao);
+                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ErradoAluno.class);
                     startActivity(intent);
                 }
                 else{
-                    Correcao.setInstance(correcao);
-                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ErradoAluno.class);
+                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, CorretoAluno.class);
                     startActivity(intent);
                 }
 

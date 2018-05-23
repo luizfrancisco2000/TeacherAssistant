@@ -1,6 +1,8 @@
 package com.example.luiz.teacherassistent.Controle;
 
 
+        import android.util.Log;
+
         import java.util.ArrayList;
 
 /**
@@ -32,24 +34,62 @@ public class Correcao {
         resolucaoUser = res;
     }
 
+    public String getErro() {
+        return erro;
+    }
+
+    public void setErro(String erro) {
+        this.erro = erro;
+    }
+
+    public ArrayList<String> getResolucaoCorreta() {
+        return resolucaoCorreta;
+    }
+    public void convertStringForArray(String correta){
+        int auxiliar=0;
+        ArrayList<String> res = new ArrayList<>();
+        for(int i = 0; i<correta.length();i++){
+            if(correta.charAt(i)=='\n'){
+                String texto = correta.subSequence(auxiliar,i).toString();
+                auxiliar=i+1;
+                res.add(texto);
+                i++;
+            }
+        }
+        resolucaoUser = res;
+    }
     public String corrigir(){
         String status = null;
-        String erro = null;
-        for (int i =0; i<resolucaoCorreta.size();i++){
-            do {
+        String erro;
+        ArrayList<String> erros = new ArrayList<>();
+        if(resolucaoCorreta.get(resolucaoCorreta.size()-1).equals(resolucaoUser.get(resolucaoUser.size()-1))) {
+            for (int i = 0; i < resolucaoCorreta.size(); i++) {
+                Log.d("Teste", resolucaoUser.get(i));
                 for (int j = 0; j < resolucaoUser.size(); j++) {
-                    if (resolucaoCorreta.get(i).equals(resolucaoUser.get(i))) {
+                    Log.d("Teste2", resolucaoUser.get(j));
+                    Log.d("Teste3", resolucaoCorreta.get(i));
+                    if (resolucaoCorreta.get(i).equals(resolucaoUser.get(j))) {
                         i++;
                         status = "tá certinho";
+                        erro = null;
                     } else {
                         status = null;
                         erro = "" + j;
+                        erros.add(erro);
+                        if (j == resolucaoUser.size() - 1) {
+                            return erros.get(0);
+                        }
                     }
+                    if (status != null)
+                        Log.d("Status", status);
                 }
-            }while(!erro.equals(null));
-            i=resolucaoCorreta.size();
+                i = resolucaoCorreta.size();
+            }
+            erro = "";
+        }else{
+            status = null;
+            erro = "" + "No resultado final";
         }
-        this.erro=erro;
         return erro;
     }
     public static Correcao getInstance(){
