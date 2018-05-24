@@ -1,6 +1,7 @@
 package com.example.luiz.teacherassistent.Interface.CorrigirQuestao;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ public class ErradoAluno extends AppCompatActivity{
         erro= (TextView) findViewById(R.id.erroAluno);
         correcao = Correcao.getInstance();
         erro.setText(correcao.getErro());
+        erro.setTextColor(Color.WHITE);
         acao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

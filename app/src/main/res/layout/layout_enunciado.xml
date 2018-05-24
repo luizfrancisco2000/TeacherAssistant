@@ -55,6 +55,11 @@ android:layout_height="match_parent">
             android:layout_height="wrap_content"
             android:text="Matemática" />
     </RadioGroup>
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/assunto"
+        ></Spinner>
     <Button
         android:id="@+id/fotoEnuciado"
         android:layout_width="wrap_content"

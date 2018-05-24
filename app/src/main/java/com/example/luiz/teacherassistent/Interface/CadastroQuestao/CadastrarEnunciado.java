@@ -18,11 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +54,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
     //botões
     private Button fotoEnunciado;
     private EditText editEnunciado;
+    private Spinner assuntos;
     private  ImageView imagemEnunciado;
     private final int GALERIA_IMAGENS = 1;
     private  FloatingActionButton continuarCadastro;
@@ -79,6 +83,8 @@ public class CadastrarEnunciado extends AppCompatActivity{
         radioQuimica = (RadioButton) findViewById(R.id.radioQuimica);
         materiasRadio = (RadioGroup) findViewById(R.id.radioMaterias);
         disciplina = (TextView) findViewById(R.id.DisciplinaProf);
+        assuntos = (Spinner) findViewById(R.id.assunto);
+
         validarPermissao();
         fotoEnunciado.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +109,46 @@ public class CadastrarEnunciado extends AppCompatActivity{
             Intent intent = new Intent(CadastrarEnunciado.this, MenuProfessor.class);
             startActivity(intent);
         }
+        if(radioFisica.isChecked()){
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            assuntos.setAdapter(adapter);
+        }else if(radioQuimica.isChecked()){
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            assuntos.setAdapter(adapter);
+        }else if(radioMatematica.isChecked()){
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            assuntos.setAdapter(adapter);
+        }
+        radioQuimica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    radioQuimica.setChecked(true);
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    assuntos.setAdapter(adapter);
+            }
+        });
+        radioFisica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioFisica.setChecked(true);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                assuntos.setAdapter(adapter);
+            }
+        });
+        radioMatematica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioMatematica.setChecked(true);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                assuntos.setAdapter(adapter);
+            }
+        });
         continuarCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,13 +157,17 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 //professor.setAtivo(false);
                 if (radioFisica.isChecked()) {
                     questao.setMateria("fisica");
-                    newTela();
+                    int aux;
+                    questao.setAssunto(assuntos.getSelectedItem().toString());
+                    procurarQuestao();
                 }else if (radioMatematica.isChecked()) {
                     questao.setMateria("matematica");
-                    newTela();
+                    questao.setAssunto(assuntos.getSelectedItem().toString());
+                    procurarQuestao();
                 } else if (radioQuimica.isChecked()) {
+                    questao.setAssunto(assuntos.getSelectedItem().toString());
                     questao.setMateria("quimica");
-                    newTela();
+                    procurarQuestao();
                 } else {
                     disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
                     disciplina.setTextColor(Color.RED);
@@ -207,9 +257,53 @@ public class CadastrarEnunciado extends AppCompatActivity{
             }
         });
     }*/
-    public void newTela(){
-        Questao.setInstance(questao);
-        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-        startActivity(intent);
+
+
+
+    private void procurarQuestao() {
+        DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
+        Log.d("Lugar do Erro", questao.getEnunciado());
+        salve.child("questao").child(questao.getMateria()).child(questao.getAssunto()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Questao questAux= dataSnapshot.getValue(Questao.class);
+                    Log.d("Cidadão2",questao.getEnunciado());
+                    abrirTelaPrincipal(questAux);
+                }
+                else {
+                    abrirTelaPrincipal(questao);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Erro", databaseError.getMessage());
+            }
+        });
+    }
+    private void abrirTelaPrincipal(final Questao questaoAux) {
+        if(!questaoAux.getEnunciado().equals(questao.getEnunciado())) {
+            Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+            startActivity(intent);
+        }
+        else{
+            AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+            alerta.setTitle("Atenção").setMessage("Questao já cadsatrada Deseja continuar?");
+            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Questao.setInstance(questaoAux);
+                    Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+                    startActivity(intent);
+                }
+            });
+            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+        }
     }
 }

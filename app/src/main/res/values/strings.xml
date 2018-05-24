@@ -6,4 +6,52 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string-array name="fisica_assuntos">
+        <item>Movimento Uniforme</item>
+        <item>Movimento Uniformemente Variado</item>
+        <item>Estudo do Vetor</item>
+        <item>Velocidade e aceleração vetorial</item>
+        <item>Lançamento horizontal</item>
+        <item>Lançamento oblíquo no vácuo</item>
+        <item>Movimento Circular Uniforme</item>
+        <item>Movimento Circular Uniformemente variado</item>
+        <item>Força</item>
+        <item>Força atrito</item>
+        <item>Trabalho</item>
+        <item>Energia</item>
+        <item>Impulso</item>
+        <item>Quantidade de movimento</item>
+        <item>Gravitação Universal</item>
+        <item>Estática</item>
+        <item>Hidrodinâmica</item>
+    </string-array>
+    <string-array name="quimica_assuntos">
+        <item>Estudo da matéria</item>
+        <item>Substâncias</item>
+        <item>Separação de misturas</item>
+        <item>Transformação de matérias</item>
+        <item>Modelos atômicos</item>
+        <item>Classificação da tabela periodica</item>
+        <item>Ligações Quimicas</item>
+        <item>Geometria Molecular</item>
+        <item>Ácidos</item>
+        <item>Bases</item>
+        <item>Sais</item>
+        <item>Óxidos Inorgânicos</item>
+        <item>Reações Químicas</item>
+        <item>Massa atômica e molecular</item>
+        <item>Estudo dos gases</item>
+    </string-array>
+    <string-array name="matematica_assuntos">
+        <item>Razão e proporção</item>
+        <item>Porcentagem</item>
+        <item>Regra de três simples e composta</item>
+        <item>Progressão Aritmética</item>
+        <item>Progressão Geométrica</item>
+        <item>Função Linear</item>
+        <item>Função Quadrática</item>
+        <item>Função Exponencoaç</item>
+        <item>Função Logarítmica</item>
+        <item>Estudo do triângulo</item>
+    </string-array>
 </resources>

@@ -59,10 +59,9 @@ public class Correcao {
         resolucaoUser = res;
     }
     public String corrigir(){
-        String status = null;
+        String status;
         String erro;
         ArrayList<String> erros = new ArrayList<>();
-        if(resolucaoCorreta.get(resolucaoCorreta.size()-1).equals(resolucaoUser.get(resolucaoUser.size()-1))) {
             for (int i = 0; i < resolucaoCorreta.size(); i++) {
                 Log.d("Teste", resolucaoUser.get(i));
                 for (int j = 0; j < resolucaoUser.size(); j++) {
@@ -86,10 +85,6 @@ public class Correcao {
                 i = resolucaoCorreta.size();
             }
             erro = "";
-        }else{
-            status = null;
-            erro = "" + "No resultado final";
-        }
         return erro;
     }
     public static Correcao getInstance(){
