@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class LoginProfessor extends AppCompatActivity {
     private TextView cadastrar;
     private FirebaseAuth auth;
     public  Professor professor;
+    private ProgressBar barrinha;
     private DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class LoginProfessor extends AppCompatActivity {
         loginprofessor = (EditText) findViewById(R.id.login);
         senhaprofessor = (EditText) findViewById(R.id.senha);
         cadastrar = (TextView) findViewById(R.id.cadastrar);
+        barrinha = (ProgressBar) findViewById(R.id.barrinha);
         cadastrar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent it = new Intent(LoginProfessor.this, CadastroProfessor.class);
@@ -55,6 +58,8 @@ public class LoginProfessor extends AppCompatActivity {
         buttonConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                barrinha.setVisibility(View.VISIBLE);
+                barrinha.setActivated(true);
                 if(!loginprofessor.getText().toString().equals("") && !senhaprofessor.getText().toString().equals("")){
                     professor = new Professor();
                     professor.setEmail(loginprofessor.getText().toString());
@@ -72,16 +77,15 @@ public class LoginProfessor extends AppCompatActivity {
         auth.signInWithEmailAndPassword(professor.getEmail(),professor.getSenha()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d("Eae", "createUserWithEmail:onComplete:" + task.isSuccessful());
-
                 if(task.isSuccessful()){
-                    Toast.makeText(LoginProfessor.this,"Blaala",Toast.LENGTH_SHORT).show();
                     AuthResult authResult = task.getResult();
                     FirebaseUser usuarioLogado = authResult.getUser();
                     professor.setId(usuarioLogado.getUid());
                     buscar();
                 }
             }
+
+
         });
     }
     public void buscar(){
@@ -91,6 +95,7 @@ public class LoginProfessor extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
                         professor = dataSnapshot.getValue(Professor.class);
+                        barrinha.setProgress(60);
                         Log.d("Cidadão2",professor.getNome());
                         abrirTelaPrincipal(professor);
                     }
@@ -107,6 +112,7 @@ public class LoginProfessor extends AppCompatActivity {
     }
     private void abrirTelaPrincipal(Professor professorLogado) {
         if(professorLogado.getAtivo()) {
+            barrinha.setProgress(100);
             Intent intent = new Intent(LoginProfessor.this, MenuProfessor.class);
             startActivity(intent);
             professor = professorLogado;

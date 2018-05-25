@@ -10,7 +10,7 @@ package com.example.luiz.teacherassistent.Controle;
  */
 
 public class Correcao {
-    private ArrayList<String> resolucaoCorreta;
+    private ArrayList<ArrayList<String>> resolucaoCorreta;
     private ArrayList<String> resolucaoUser;
     private  int auxiliar;
     private String erro;
@@ -19,8 +19,8 @@ public class Correcao {
     public Correcao(){
 
     }
-    public void setResolucaoCorreta(ArrayList<String> correta){
-        this.resolucaoCorreta=correta;
+    public void setResolucaoCorreta(ArrayList<ArrayList<String>> correta){
+        this.resolucaoCorreta = correta;
     }
     public void setResolucaoUser(String resolucao) {
         ArrayList<String> res = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Correcao {
         this.erro = erro;
     }
 
-    public ArrayList<String> getResolucaoCorreta() {
+    public ArrayList<ArrayList<String>> getResolucaoCorreta() {
         return resolucaoCorreta;
     }
     public void convertStringForArray(String correta){
@@ -62,7 +62,7 @@ public class Correcao {
         String status;
         String erro;
         ArrayList<String> erros = new ArrayList<>();
-            for (int i = 0; i < resolucaoCorreta.size(); i++) {
+            /*for (int i = 0; i < resolucaoCorreta.size(); i++) {
                 Log.d("Teste", resolucaoUser.get(i));
                 for (int j = 0; j < resolucaoUser.size(); j++) {
                     Log.d("Teste2", resolucaoUser.get(j));
@@ -85,7 +85,8 @@ public class Correcao {
                 i = resolucaoCorreta.size();
             }
             erro = "";
-        return erro;
+        return erro;*/
+        return null;
     }
     public static Correcao getInstance(){
         if(getInstance==null){

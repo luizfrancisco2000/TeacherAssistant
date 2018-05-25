@@ -24,9 +24,15 @@ import android.widget.Toast;
 import com.example.luiz.teacherassistent.Controle.Questao;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
+import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CadastrarResolucao extends AppCompatActivity {
@@ -62,9 +68,13 @@ public class CadastrarResolucao extends AppCompatActivity {
         concluirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                questao.convertStringForArray(editResolucao.getText().toString());
                 Questao.setInstance(questao);
-                questao.salvar();
+                questao.convertStringForArray(editResolucao.getText().toString());
+                if(questao.getResolucao()==null) {
+                    questao.salvar();
+                }else{
+                    atualizarBanco();
+                }
                 Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
                 Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
@@ -110,5 +120,18 @@ public class CadastrarResolucao extends AppCompatActivity {
             Bitmap bitmapReduzido = Bitmap.createScaledBitmap(imageGaleria, 100, 100, true);
             imagemResolucao.setImageBitmap(bitmapReduzido);
         }
+    }
+    public void atualizarBanco(){
+        DatabaseReference datbase = ConfiguracaoDataBase.getFirebase();
+        String key = datbase.child("questao").child(questao.getMateria()).child(questao.getAssunto()).push().getKey();
+        Map<String, Object> questaoSalvar = questao.toMap();
+        Map<String, Object> questaoAtualizacoes = new HashMap<>();
+        questaoAtualizacoes.put("/questoes/"+questao.getMateria()+"/"+questao.getAssunto()+"/"+key,questaoSalvar);
+        datbase.updateChildren(questaoAtualizacoes).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("Atualicao","Atualização feita com sucesso");
+            }
+        });
     }
 }
