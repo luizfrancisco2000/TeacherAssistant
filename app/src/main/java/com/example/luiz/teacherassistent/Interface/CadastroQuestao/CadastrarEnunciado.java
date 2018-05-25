@@ -266,13 +266,15 @@ public class CadastrarEnunciado extends AppCompatActivity{
         salve.child("questao").child(questao.getMateria()).child(questao.getAssunto()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Questao questAux= dataSnapshot.getValue(Questao.class);
-                    Log.d("Cidadão2",questao.getEnunciado());
-                    abrirTelaPrincipal(questAux);
-                }
-                else {
-                    abrirTelaPrincipal(questao);
+                if(dataSnapshot.getValue(Questao.class)!=null){
+                    Questao questAux = dataSnapshot.getValue(Questao.class);
+                    ArrayList<Questao> questoes = new ArrayList<>();
+                    questoes.add(questAux);
+                    Log.d("Cidadão2", questao.getEnunciado());
+                    abrirTelaPrincipal(questoes);
+                }else{
+                    Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+                    startActivity(intent);
                 }
             }
 
@@ -282,28 +284,30 @@ public class CadastrarEnunciado extends AppCompatActivity{
             }
         });
     }
-    private void abrirTelaPrincipal(final Questao questaoAux) {
-        if(!questaoAux.getEnunciado().equals(questao.getEnunciado())) {
-            Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-            startActivity(intent);
-        }
-        else{
-            AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-            alerta.setTitle("Atenção").setMessage("Questao já cadsatrada Deseja continuar?");
-            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Questao.setInstance(questaoAux);
-                    Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                    startActivity(intent);
-                }
-            });
-            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
-                }
-            });
+    private void abrirTelaPrincipal(final ArrayList<Questao> questoes) {
+        for(final Questao questaoAux: questoes) {
+            if (!questaoAux.getEnunciado().equals(questao.getEnunciado())) {
+                Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+                startActivity(intent);
+            } else {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+                alerta.setTitle("Atenção").setMessage("Questao já cadsatrada Deseja continuar?");
+                alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Questao q = questaoAux;
+                        Questao.setInstance(q);
+                        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
+                        startActivity(intent);
+                    }
+                });
+                alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+            }
         }
     }
 }
