@@ -64,6 +64,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
     private RadioButton radioMatematica;
     private RadioGroup materiasRadio;
     private TextView disciplina;
+    private AlertDialog alert;
     //constantes e variaveis
     private final int  PERMISSAO_REQUEST =2;
     Questao questao;
@@ -85,7 +86,6 @@ public class CadastrarEnunciado extends AppCompatActivity{
         materiasRadio = (RadioGroup) findViewById(R.id.radioMaterias);
         disciplina = (TextView) findViewById(R.id.DisciplinaProf);
         assuntos = (Spinner) findViewById(R.id.assunto);
-
         validarPermissao();
         fotoEnunciado.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,18 +263,15 @@ public class CadastrarEnunciado extends AppCompatActivity{
 
     private void procurarQuestao() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(questao.getMateria()).child(questao.getAssunto()).addValueEventListener(new ValueEventListener() {
+        salve.child("questao").child(questao.getMateria()).child(questao.getAssunto()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Questao> questoes = new ArrayList<>();
                 for(DataSnapshot post:dataSnapshot.getChildren()){
-                    questoes.add(post.getValue(Questao.class));
+                    Questao quest = post.getValue(Questao.class);
+                    questoes.add(quest);
+                    Log.d("Teste llll",questoes.get(0).getEnunciado());
                 }
-                if(questoes.size()<=0){
-                    Questao.setInstance(questao);
-                    abrirTelaPrincipal();
-                }
-                else{
                     for(Questao q:questoes){
                         if(q.getEnunciado().equals(questao.getEnunciado())){
                             AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
@@ -292,11 +289,12 @@ public class CadastrarEnunciado extends AppCompatActivity{
                                     dialogInterface.cancel();
                                 }
                             });
+                            alert = alerta.create();
+                            alert.show();
                         }
                     }
                     Questao.setInstance(questao);
                     abrirTelaPrincipal();
-                }
             }
 
             @Override

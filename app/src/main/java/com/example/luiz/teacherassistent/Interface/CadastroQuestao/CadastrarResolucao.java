@@ -70,14 +70,15 @@ public class CadastrarResolucao extends AppCompatActivity {
             public void onClick(View view) {
                 Questao.setInstance(questao);
                 questao.convertStringForArray(editResolucao.getText().toString());
-                if(questao.getResolucao()==null) {
+                if(questao.getResolucao().size()<=1) {
                     questao.salvar();
+                    Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
+                    Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
                 }else{
                     atualizarBanco();
                 }
-                Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
-                Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+
             }
         });
     }
@@ -123,14 +124,15 @@ public class CadastrarResolucao extends AppCompatActivity {
     }
     public void atualizarBanco(){
         DatabaseReference datbase = ConfiguracaoDataBase.getFirebase();
-        String key = datbase.child("questao").child(questao.getMateria()).child(questao.getAssunto()).push().getKey();
         Map<String, Object> questaoSalvar = questao.toMap();
         Map<String, Object> questaoAtualizacoes = new HashMap<>();
-        questaoAtualizacoes.put("/questoes/"+questao.getMateria()+"/"+questao.getAssunto()+"/"+key,questaoSalvar);
+        questaoAtualizacoes.put("/questoes/"+questao.getMateria()+"/"+questao.getAssunto()+"/",questaoSalvar);
         datbase.updateChildren(questaoAtualizacoes).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("Atualicao","Atualização feita com sucesso");
+                Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
+                startActivity(intent);
             }
         });
     }

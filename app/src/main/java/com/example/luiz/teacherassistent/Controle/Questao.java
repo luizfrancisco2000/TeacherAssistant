@@ -27,7 +27,7 @@ public class Questao {
     }
     public void salvar(){
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(String.valueOf(getMateria())).setValue(this);
+        salve.child("questao").child(String.valueOf(getMateria())).child(String.valueOf(getAssunto())).setValue(this);
     }
     @Exclude
     public Map<String, Object> toMap(){
@@ -56,9 +56,9 @@ public class Questao {
                 res.add(texto);
                 i++;
             }
-
         }
         ArrayList<ArrayList<String>> teste = new ArrayList<>();
+        teste.add(res);
         resolucao = teste;
     }
     public String getMateria() {
