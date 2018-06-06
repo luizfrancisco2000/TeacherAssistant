@@ -263,47 +263,48 @@ public class CadastrarEnunciado extends AppCompatActivity{
 
     private void procurarQuestao() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(questao.getMateria()).child(questao.getAssunto()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Questao> questoes = new ArrayList<>();
-                for(DataSnapshot post:dataSnapshot.getChildren()){
-                    Questao quest = post.getValue(Questao.class);
-                    questoes.add(quest);
-                    Log.d("Teste llll",questoes.get(0).getEnunciado());
-                }
-                    for(Questao q:questoes){
-                        if(q.getEnunciado().equals(questao.getEnunciado())){
-                            AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                            alerta.setTitle("Atenção").setMessage("Questao já cadsatrada Deseja continuar?");
-                            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Questao.setInstance(questao);
-                                    abrirTelaPrincipal();
+        salve.child("questao").child(String.valueOf(questao.getMateria())).child(
+                String.valueOf(questao.getAssunto())).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        try{
+                            if(dataSnapshot.getValue(Questao.class).getEnunciado()!=null){
+                                if(dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())){
+                                    AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+                                    alerta.setTitle("Atenção").setMessage("Questao já cadsatrada" + questao.getMateria() + "\nDeseja continuar?");
+                                    alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            questao = dataSnapshot.getValue(Questao.class);
+                                            abrirTelaPrincipal();
+                                        }
+                                    });
+                                    alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                        }
+                                    });
+                                    alert = alerta.create();
+                                    alert.show();
                                 }
-                            });
-                            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-                                }
-                            });
-                            alert = alerta.create();
-                            alert.show();
+                            }
+                            else{
+                                abrirTelaPrincipal();
+                            }
+                        }catch(Exception e){
+                            abrirTelaPrincipal();
                         }
                     }
-                    Questao.setInstance(questao);
-                    abrirTelaPrincipal();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("Erro",databaseError.getMessage());
-            }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
         });
     }
     private void abrirTelaPrincipal() {
+        Questao.setInstance(questao);
         Intent intent = new Intent(CadastrarEnunciado.this,CadastrarResolucao.class);
         startActivity(intent);
     }

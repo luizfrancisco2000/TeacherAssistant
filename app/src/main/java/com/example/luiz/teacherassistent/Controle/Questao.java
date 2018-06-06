@@ -59,7 +59,13 @@ public class Questao {
         }
         ArrayList<ArrayList<String>> teste = new ArrayList<>();
         teste.add(res);
-        resolucao = teste;
+        if(resolucao.size()==0){
+            resolucao = teste;
+        }else{
+            teste = resolucao;
+            teste.add(res);
+            resolucao=teste;
+        }
     }
     public String getMateria() {
         return materia;

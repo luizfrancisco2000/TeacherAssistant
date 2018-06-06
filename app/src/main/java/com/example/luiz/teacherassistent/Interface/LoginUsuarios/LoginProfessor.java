@@ -82,6 +82,10 @@ public class LoginProfessor extends AppCompatActivity {
                     FirebaseUser usuarioLogado = authResult.getUser();
                     professor.setId(usuarioLogado.getUid());
                     buscar();
+                }else {
+                    Toast.makeText(LoginProfessor.this, "Senha incorreta", Toast.LENGTH_SHORT).show();
+                    barrinha.setActivated(false);
+                    barrinha.setVisibility(View.INVISIBLE);
                 }
             }
 
