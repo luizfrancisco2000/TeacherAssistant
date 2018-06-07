@@ -19,9 +19,9 @@
         <Button
             android:id="@+id/butCorrigirquest"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:background="@drawable/corrigirQuestao" />
+            android:background="@drawable/corrigirquestao" />
 
     </LinearLayout>
     <LinearLayout
