@@ -68,9 +68,8 @@ public class CadastrarResolucao extends AppCompatActivity {
         concluirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Questao.setInstance(questao);
                 questao.convertStringForArray(editResolucao.getText().toString());
-                if(questao.getResolucao().size()<=1) {
+                if(questao.getResolucao().size()==1) {
                     questao.salvar();
                     Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
                     Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();

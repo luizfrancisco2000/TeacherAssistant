@@ -22,17 +22,6 @@ public class Correcao {
     public void setResolucaoCorreta(ArrayList<ArrayList<String>> correta){
         this.resolucaoCorreta = correta;
     }
-    public void setResolucaoUser(String resolucao) {
-        ArrayList<String> res = new ArrayList<>();
-        for(int i = 0; i<resolucao.length();i++){
-            auxiliar=0;
-            if(resolucao.charAt(i)=='\n'){
-                res.add(resolucao.subSequence(auxiliar,i).toString());
-                auxiliar=i+1;
-            }
-        }
-        resolucaoUser = res;
-    }
 
     public String getErro() {
         return erro;
@@ -58,35 +47,67 @@ public class Correcao {
         }
         resolucaoUser = res;
     }
-    public String corrigir(){
-        String status;
-        String erro;
+    public String corrigir() {
+        String status = null;
+        String erro = "";
         ArrayList<String> erros = new ArrayList<>();
-            /*for (int i = 0; i < resolucaoCorreta.size(); i++) {
+        /*for(ArrayList<String> q: resolucaoCorreta) {
+            for (int i = 0; i < q.size(); i++) {
                 Log.d("Teste", resolucaoUser.get(i));
                 for (int j = 0; j < resolucaoUser.size(); j++) {
                     Log.d("Teste2", resolucaoUser.get(j));
-                    Log.d("Teste3", resolucaoCorreta.get(i));
-                    if (resolucaoCorreta.get(i).equals(resolucaoUser.get(j))) {
+                    Log.d("Teste3", q.get(i));
+                    if (q.get(i).equals(resolucaoUser.get(j))) {
                         i++;
                         status = "tá certinho";
-                        erro = null;
+                        erros.clear();
+                        erro = "";
                     } else {
                         status = null;
                         erro = "" + j;
                         erros.add(erro);
-                        if (j == resolucaoUser.size() - 1) {
-                            return erros.get(0);
-                        }
                     }
-                    if (status != null)
+                    if (status != null && j==resolucaoUser.size()-1){
                         Log.d("Status", status);
+                        return erro;
+                    }
                 }
                 i = resolucaoCorreta.size();
             }
+            if(erros.isEmpty() || erros.size()==0) {
+                erro = "";
+            }else{
+                erro=erros.get(0);
+            }
+        }*/
+    for(int q=0; q<resolucaoCorreta.size();q++){
+        for (int i = 0; i < resolucaoCorreta.get(q).size(); i++) {
+            for (int j = 0; j < resolucaoUser.size(); j++) {
+                Log.d("Teste2", resolucaoUser.get(j));
+                Log.d("Teste3", resolucaoCorreta.get(q).get(i));
+                if (resolucaoCorreta.get(q).get(i).equals(resolucaoUser.get(j))) {
+                    i++;
+                    status = "tá certinho";
+                    erros.clear();
+                    erro = "";
+                } else {
+                    status = null;
+                    erro = "" + j;
+                    erros.add(erro);
+                }
+                if (status != null && j == resolucaoUser.size() - 1) {
+                    Log.d("Status", status);
+                    return erro;
+                }
+            }
+        }
+    }
+        if(erros.isEmpty() || erros.size()==0) {
             erro = "";
-        return erro;*/
-        return null;
+        }else{
+            erro=erros.get(0);
+        }
+        return erro;
     }
     public static Correcao getInstance(){
         if(getInstance==null){

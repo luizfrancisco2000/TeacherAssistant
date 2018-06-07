@@ -117,12 +117,11 @@ public class LoginProfessor extends AppCompatActivity {
     private void abrirTelaPrincipal(Professor professorLogado) {
         if(professorLogado.getAtivo()) {
             barrinha.setProgress(100);
-            Intent intent = new Intent(LoginProfessor.this, MenuProfessor.class);
-            startActivity(intent);
             professor = professorLogado;
             Professor.setInstance(professor);
-        }
-        else{
+            Intent intent = new Intent(LoginProfessor.this, MenuProfessor.class);
+            startActivity(intent);
+        }else{
             Intent intent = new Intent(LoginProfessor.this, InstrucaoCadastroProfessor.class);
             startActivity(intent);
         }

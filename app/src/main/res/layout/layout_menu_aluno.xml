@@ -7,7 +7,7 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
+    android:layout_weight="0.5"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,29 +19,30 @@
         <Button
             android:id="@+id/butCorrigirquest"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:text="Corrigir Questões" />
+            android:layout_height="64dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/corrigirQuestao" />
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
         android:orientation="horizontal">//Esse Layout pesa 50% do Layout total
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:text="Fórum"
-            android:id="@+id/butonForumAluno"
-            />
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:text="Lista de Exercício"
-            />
 
+        <Button
+            android:id="@+id/butonForumAluno"
+            android:layout_width="fill_parent"
+            android:layout_height="252dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/forum" />
+
+        <Button
+            android:id="@+id/butonLista"
+            android:layout_width="fill_parent"
+            android:layout_height="252dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/lista" />
     </LinearLayout>
+
 </LinearLayout>
 </RelativeLayout>

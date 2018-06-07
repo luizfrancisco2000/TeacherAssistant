@@ -1,5 +1,6 @@
 package com.example.luiz.teacherassistent.Interface.CorrigirQuestao;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,15 +14,18 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +33,10 @@ import com.example.luiz.teacherassistent.Controle.Aluno;
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
 import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.InstrucaoCadastroProfessor;
 import com.example.luiz.teacherassistent.Interface.LoginUsuarios.LoginProfessor;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuAluno;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
@@ -58,10 +64,12 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     private RadioButton radioMatematica;
     private RadioGroup materiasRadio;
     private TextView disciplina;
+    private Spinner assuntos;
     //constantes e variaveis
     private final int  PERMISSAO_REQUEST =2;
     private Questao questao;
     private Aluno aluno;
+    private Correcao correcao;
     // ferramentas
     private TextRecognizer ocrEnunciado;
     private Bitmap imageGaleria;
@@ -78,12 +86,53 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         radioQuimica = (RadioButton) findViewById(R.id.radioQuimica);
         materiasRadio = (RadioGroup) findViewById(R.id.radioMaterias);
         disciplina = (TextView) findViewById(R.id.DisciplinaProf);
+        assuntos = (Spinner) findViewById(R.id.assunto);
         validarPermissao();
         fotoEnunciado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent,GALERIA_IMAGENS);
+            }
+        });
+        if(radioFisica.isChecked()){
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            assuntos.setAdapter(adapter);
+        }else if(radioQuimica.isChecked()){
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            assuntos.setAdapter(adapter);
+        }else if(radioMatematica.isChecked()){
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            assuntos.setAdapter(adapter);
+        }
+        radioQuimica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioQuimica.setChecked(true);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                assuntos.setAdapter(adapter);
+            }
+        });
+        radioFisica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioFisica.setChecked(true);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                assuntos.setAdapter(adapter);
+            }
+        });
+        radioMatematica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioMatematica.setChecked(true);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                assuntos.setAdapter(adapter);
             }
         });
         continuarResolucao.setOnClickListener(new View.OnClickListener() {
@@ -94,10 +143,16 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                     //professor.setAtivo(false);
                     if (radioFisica.isChecked()) {
                         questao.setMateria("fisica");
+                        questao.setAssunto(assuntos.getSelectedItem().toString());
+                        buscar();
                     } else if (radioMatematica.isChecked()) {
                         questao.setMateria("matematica");
+                        questao.setAssunto(assuntos.getSelectedItem().toString());
+                        buscar();
                     } else if (radioQuimica.isChecked()) {
                         questao.setMateria("quimica");
+                        questao.setAssunto(assuntos.getSelectedItem().toString());
+                        buscar();
                     } else {
                         disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
                         disciplina.setTextColor(Color.RED);
@@ -152,29 +207,99 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     }
     public void buscar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(questao.getMateria()).addValueEventListener(new ValueEventListener() {
+        salve.child("questao").child(String.valueOf(questao.getMateria())).child(
+                String.valueOf(questao.getAssunto())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    questao = dataSnapshot.getValue(Questao.class);
-                    Log.d("Cidadão2",questao.getResolucao().toString());
-                    abrirTelaPrincipal(questao);
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                try{
+                    if(dataSnapshot.exists()) {
+                        if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
+                            Log.d("Vamos lá", dataSnapshot.getValue(Questao.class).getEnunciado());
+                            if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
+                                correcao = dataSnapshot.getValue(Questao.class).exportResolucao();
+                                abrirTelaPrincipal();
+                            } else {
+                                AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
+                                alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
+                                alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                                //alert = alerta.create();
+                                //alert.show();
+                            }
+                        } else {
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
+                            alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
+                            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
+                                    startActivity(intent);
+                                }
+                            });
+                            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                            //alert = alerta.create();
+                            //alert.show();
+                        }
+                    }else{
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
+                        alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
+                        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
+                                startActivity(intent);
+                            }
+                        });
+                        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                    }
+                }catch(Exception e){
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
+                    alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
+                    alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
+                            startActivity(intent);
+                        }
+                    });
+                    alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
                 }
-                else {
-                    Log.d("Erro", "Mais uma vez");
-                    questao=null;
-                }
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("Erro", databaseError.getMessage());
+
             }
         });
     }
-    private void abrirTelaPrincipal(Questao questao) {
-        this.questao=questao;
-        Correcao correcao = this.questao.exportResolucao();
+    private void abrirTelaPrincipal() {
         Correcao.setInstance(correcao);
         Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this,CorrigirBuscarResolucaoAluno.class);
         startActivity(intent);

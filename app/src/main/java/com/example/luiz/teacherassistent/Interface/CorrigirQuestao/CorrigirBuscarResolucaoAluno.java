@@ -49,6 +49,7 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         fotoResolucaoAluno = (ImageView) findViewById(R.id.imageResourceID);
         concluir = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
         correcao = Correcao.getInstance();
+        Log.d("Teste",correcao.getResolucaoCorreta().get(0).toString());
         fotoResolucaoAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
