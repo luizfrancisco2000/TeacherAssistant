@@ -123,26 +123,32 @@ public class CadastrarResolucao extends AppCompatActivity {
             imagemResolucao.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             String[] filePath = {MediaStore.Images.Media.DATA};
             Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+
             c.moveToFirst();
             String picturePath = c.getString(c.getColumnIndex(filePath[0]));
             c.close();
             imagemResolucao.setDrawingCacheEnabled(true);
             imagemResolucao.buildDrawingCache();
             imageGaleria = (BitmapFactory.decodeFile(picturePath));
-            File f = persistImage(imageGaleria,"resolucao");
-            if(f.exists()) {
-                try {
-                    String result = new ProcessSingleImageTask().execute(testeBase).get();
-                    editResolucao.setText(result);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                Toast.makeText(this, "Coco", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void atualizarBanco() {
+        DatabaseReference datbase = ConfiguracaoDataBase.getFirebase();
+        Map<String, Object> questaoSalvar = questao.toMap();
+        Map<String, Object> questaoAtualizacoes = new HashMap<>();
+        questaoAtualizacoes.put("/questao/" + questao.getMateria() + "/" + questao.getAssunto() + "/", questaoSalvar);
+        datbase.updateChildren(questaoAtualizacoes).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("Atualicao", "Atualização feita com sucesso");
+                Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
+                startActivity(intent);
             }
-            /*imageGaleria = (BitmapFactory.decodeFile(picturePath));
+        });
+    }
+/*imageGaleria = (BitmapFactory.decodeFile(picturePath));
             MediaType mediaType = MediaType.parse("application/json");
 
             //RequestBody body = RequestBody.create(mediaType, Base64Custom.codificarBase64(filePath[0]));
@@ -178,67 +184,4 @@ public class CadastrarResolucao extends AppCompatActivity {
             Bitmap bitmapReduzido = Bitmap.createScaledBitmap(imageGaleria, 100, 100, true);
             imagemResolucao.setImageBitmap(bitmapReduzido);
             */
-        }
-    }
-
-    public void atualizarBanco() {
-        DatabaseReference datbase = ConfiguracaoDataBase.getFirebase();
-        Map<String, Object> questaoSalvar = questao.toMap();
-        Map<String, Object> questaoAtualizacoes = new HashMap<>();
-        questaoAtualizacoes.put("/questao/" + questao.getMateria() + "/" + questao.getAssunto() + "/", questaoSalvar);
-        datbase.updateChildren(questaoAtualizacoes).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("Atualicao", "Atualização feita com sucesso");
-                Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
-                startActivity(intent);
-            }
-        });
-    }
-    private File persistImage(Bitmap bitmap, String name) {
-
-        filesDir = getApplicationContext().getFilesDir();
-        imageFile = new File(filesDir, name + ".jpeg");
-         testeBase = new File("/data/data/" + getPackageName() + "/" + imageFile.getName());
-        OutputStream os;
-        try {
-            os = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-            os.flush();
-            os.close();
-            return imageFile;
-        } catch (Exception e) {
-            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
-            return null;
-        }
-    }
-    private File getTestFile(File file) {
-        AssetManager assetManager = getAssets();
-        InputStream in;
-        OutputStream out;
-
-        try {
-            in = assetManager.open(file.getName());
-            File cloneFile = new File("/data/data/" + getPackageName() + "/" + file.getName());
-
-            if (cloneFile.exists()) return cloneFile;
-
-            out = new FileOutputStream(cloneFile);
-
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            in.close();
-            out.flush();
-            out.close();
-
-            return cloneFile;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
