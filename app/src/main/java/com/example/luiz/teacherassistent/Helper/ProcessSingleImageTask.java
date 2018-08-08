@@ -76,4 +76,4 @@ public class ProcessSingleImageTask extends AsyncTask<File, Object, String> {
         //Log response string
         Log.e(TAG, s);
     }
-}}
+}
