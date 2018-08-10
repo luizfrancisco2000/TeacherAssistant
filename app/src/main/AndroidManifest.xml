@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+    <uses-permission android:name="android.permission.READ_OWNER_DATA" />
     <meta-data
         android:name="com.google.android.gms.vision.DEPEDENCIES"
         android:value="ocr" />
@@ -17,35 +19,57 @@
         android:icon="@drawable/icone"
         android:roundIcon="@drawable/icone"
         android:supportsRtl="true"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:versionName="TeacherAssistent"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".Interface.Menus.MenuPrincipal">
+        <activity android:name=".Interface.Menus.MenuPrincipal"
+
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Interface.LoginUsuarios.LoginAluno" />
-        <activity android:name=".Interface.LoginUsuarios.LoginProfessor" />
-        <activity android:name=".Interface.CorrigirQuestao.ErradoAluno" />
-        <activity android:name=".Interface.CorrigirQuestao.CorretoAluno"/>
-        <activity android:name=".Interface.Menus.MenuAluno" />
-        <activity android:name=".Interface.CadastroQuestao.CadastrarEnunciado" />
-        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno" />
-        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarResolucaoAluno" />
-        <activity android:name=".Interface.CorrigirQuestao.TelaInstrucaoProfessor" />
-        <activity android:name=".Interface.CorrigirQuestao.TelaInstrucaoAluno" />
-        <activity android:name=".Interface.CadastroQuestao.InstrucaoCadastro" />
-        <activity android:name=".Interface.Menus.MenuProfessor" />
-        <activity android:name=".Interface.CadastroUsuarios.CadastroProfessor" />
-        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoProfessor" />
-        <activity android:name=".Interface.CadastroQuestao.CadastrarResolucao" />
-        <activity android:name=".Interface.ForumUsuarios.ForumAluno" />
-        <activity android:name=".Interface.ForumUsuarios.ForumProfessor" />
-        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarResolucaoProfessor" />
-        <activity android:name=".Interface.CadastroUsuarios.InstrucaoCadastroProfessor"/>
+        <activity android:name=".Interface.LoginUsuarios.LoginAluno"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.LoginUsuarios.LoginProfessor"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CorrigirQuestao.ErradoAluno"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CorrigirQuestao.CorretoAluno"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.Menus.MenuAluno"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.CadastroQuestao.CadastrarEnunciado"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarResolucaoAluno"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.CorrigirQuestao.TelaInstrucaoProfessor"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.CorrigirQuestao.TelaInstrucaoAluno"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.CadastroQuestao.InstrucaoCadastro"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.Menus.MenuProfessor"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CadastroUsuarios.CadastroProfessor"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarEnunciadoProfessor"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CadastroQuestao.CadastrarResolucao"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.ForumUsuarios.ForumAluno"
+            android:label="@string/app_name" />
+        <activity android:name=".Interface.ForumUsuarios.ForumProfessor"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CorrigirQuestao.CorrigirBuscarResolucaoProfessor"
+            android:label="@string/app_name"/>
+        <activity android:name=".Interface.CadastroUsuarios.InstrucaoCadastroProfessor"
+            android:label="@string/app_name"/>
     </application>
 
 </manifest>

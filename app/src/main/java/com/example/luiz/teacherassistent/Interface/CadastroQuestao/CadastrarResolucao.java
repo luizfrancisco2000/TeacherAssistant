@@ -155,7 +155,7 @@ public class CadastrarResolucao extends AppCompatActivity {
         try {
             bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriFromPath));
             if (imageFile.exists()) {
-                String result = new ProcessSingleImageTask().execute(getTestFile(resultFile)).get();
+                String result = new ProcessSingleImageTask().execute(imageFile).get();
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -228,13 +228,12 @@ public class CadastrarResolucao extends AppCompatActivity {
     private File getTestFile(String filename) {
         AssetManager assetManager = getAssets();
 
+
         InputStream in;
         OutputStream out;
-
         try {
             in = assetManager.open(filename);
             File cloneFile = new File("/data/data/" + getPackageName() + "/" + filename);
-
             if(cloneFile.exists()) return cloneFile;
 
             out = new FileOutputStream(cloneFile);
@@ -251,6 +250,7 @@ public class CadastrarResolucao extends AppCompatActivity {
             return cloneFile;
 
         } catch (Exception e) {
+            Log.d("aa",e.getMessage());
             e.printStackTrace();
             return null;
         }
