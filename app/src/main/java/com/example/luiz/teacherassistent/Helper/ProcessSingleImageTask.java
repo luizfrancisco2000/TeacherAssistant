@@ -36,16 +36,21 @@ public class ProcessSingleImageTask extends AsyncTask<File, Object, String> {
                     OkHttpClient client = new OkHttpClient();
 
                     MediaType mediaType = MediaType.parse("application/json");
-                    RequestBody body = RequestBody.create(mediaType, String.format("{ \"url\" : \"data:image/jpeg;base64,{%s}\" }", base64String));
+                    RequestBody body = RequestBody.create(mediaType, String.format("{ \"src\" : \"data:image/jpeg;base64,{%s}\" }", base64String));
                     Request request = new Request.Builder()
                             .url("https://api.mathpix.com/v3/latex")
                             .addHeader("content-type", "application/json")
-                            .addHeader("app_id", "mathpix")
-                            .addHeader("app_key", "139ee4b61be2e4abcfb1238d9eb99902")
+                            .addHeader("app_id", "luizfrancisco2000_gmail_com")
+                            .addHeader("app_key", "1ad72749ebbc4a8041d2")
                             .post(body)
                             .build();
                     Response response = client.newCall(request).execute();
-
+                    if(!response.isSuccessful()){
+                        Log.d(TAG,"Deu errado");
+                    }
+                    else{
+                       Log.d(TAG,"Deu certo");
+                    }
                     if(response == null) {
                         return "Error: Server connection error";
                     } else {
