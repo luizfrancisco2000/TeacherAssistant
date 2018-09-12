@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
 import com.example.luiz.teacherassistent.Helper.api.SingleProcessRequest;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -54,19 +55,22 @@ public class ProcessSingleImageTask extends AsyncTask<File, Object, String> {
                                 .post(requestBody)
                                 .build();
                         Response response = client.newCall(request).execute();
+                        ResponseBody responseBody = response.body();
+                        String responseString = responseBody.toString();
+                        DetectionResult detectionResult = new Gson().fromJson(responseString, DetectionResult.class);
                         if (!response.isSuccessful()) {
                             Log.d(TAG, "Deu errado");
+                            Log.d(TAG,response.message());
                         } else {
                             Log.d(TAG, "Deu certo");
                         }
                         if (response == null) {
                             return "Error: Server connection error";
                         } else {
-                            ResponseBody responseBody = response.body();
                             if (responseBody == null) {
                                 return "Error: Server connection error";
                             }
-                            return responseBody.string();
+                            return detectionResult.latex;
                         }
                     }else{
                         return "Error: Image file does not exist";

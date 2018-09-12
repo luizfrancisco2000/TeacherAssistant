@@ -1,5 +1,6 @@
 package com.example.luiz.teacherassistent.Interface.CadastroQuestao;
 
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +22,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,12 +49,14 @@ import com.squareup.okhttp.Response;
 
 import junit.framework.Assert;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,11 +79,17 @@ public class CadastrarResolucao extends AppCompatActivity {
     private File imageFile;
     private String realPath;
 
+    /**Processamento de textos
+     * */
+    private WebView mWebView;
+    private String latex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_resolucao);
         validarPermissao();
+        mWebView = (WebView) findViewById(R.id.webViewRes);
         fotoResolucao = (Button) findViewById(R.id.FotoResolucao);
         editResolucao = (EditText) findViewById(R.id.ResolucaoEdit);
         imagemResolucao = (ImageView) findViewById(R.id.imageResourceID);
@@ -156,6 +168,8 @@ public class CadastrarResolucao extends AppCompatActivity {
             bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriFromPath));
             if (imageFile.exists()) {
                 String result = new ProcessSingleImageTask().execute(imageFile).get();
+                String test = loadLocalContent();
+                Log.d("Desencargo",test);
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -256,4 +270,63 @@ public class CadastrarResolucao extends AppCompatActivity {
         }
     }
 
+    /**Parte de processamento de texto
+     * Por favor não mexa*/
+
+    public String loadLocalContent() {
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                final String js = "javascript.setLatex('" + latex + "')";
+                if (mWebView != null) {
+                    mWebView.loadUrl(js);
+                }
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return true;
+            }
+        });
+        WebSettings settings = mWebView.getSettings();
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        if (Build.VERSION.SDK_INT >= 16) {
+            settings.setAllowFileAccessFromFileURLs(true);
+            settings.setAllowUniversalAccessFromFileURLs(true);
+        }
+        String localURL = "file:///android_asset/";
+        String htmlString = localHTML(getApplicationContext());
+        mWebView.loadDataWithBaseURL(localURL, htmlString, "text/html", "UTF-8", null);
+        String result = mWebView.toString();
+        return result;
+    }
+    public String localHTML(Context context) {
+        StringBuilder stringBuilder = new StringBuilder();
+        InputStream json;
+        try {
+            if(context.getAssets().open("latex.html")==null){
+                Log.d("Dont","Existe");
+            }else{
+                Log.w("Funcionou","oooooooooooo");
+            }
+            json = context.getAssets().open("latex.html");
+            BufferedReader in = new BufferedReader(new InputStreamReader(json));
+            String str;
+
+            while ((str = in.readLine()) != null) {
+                stringBuilder.append(str);
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    private void showErrorAndReset(String errMessage) {
+        Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
+    }
 }

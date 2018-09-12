@@ -52,7 +52,12 @@
             android:clickable="true"
             app:backgroundTint="?attr/colorPrimary"
             app:srcCompat="@drawable/ic_menu_send" />
-
+        <WebView
+            android:layout_width="wrap_content"
+            android:id="@+id/webViewRes"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
     </LinearLayout>
 </RelativeLayout>
 </ScrollView>
