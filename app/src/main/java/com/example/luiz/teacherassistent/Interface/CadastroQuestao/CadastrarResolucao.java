@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.example.luiz.teacherassistent.Controle.Questao;
 import com.example.luiz.teacherassistent.Helper.Base64Custom;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
+import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
@@ -167,7 +168,9 @@ public class CadastrarResolucao extends AppCompatActivity {
         try {
             bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uriFromPath));
             if (imageFile.exists()) {
-                String result = new ProcessSingleImageTask().execute(imageFile).get();
+                DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
+                Log.d("Mostra", detectionResult.latex);
+                latex = detectionResult.latex;
                 String test = loadLocalContent();
                 Log.d("Desencargo",test);
             } else {
@@ -274,6 +277,7 @@ public class CadastrarResolucao extends AppCompatActivity {
      * Por favor não mexa*/
 
     public String loadLocalContent() {
+        mWebView.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -281,7 +285,10 @@ public class CadastrarResolucao extends AppCompatActivity {
                 super.onPageFinished(view, url);
                 final String js = "javascript.setLatex('" + latex + "')";
                 if (mWebView != null) {
+                    Log.w("seila","aaaaa");
                     mWebView.loadUrl(js);
+                }else{
+
                 }
             }
 
@@ -301,6 +308,7 @@ public class CadastrarResolucao extends AppCompatActivity {
         String htmlString = localHTML(getApplicationContext());
         mWebView.loadDataWithBaseURL(localURL, htmlString, "text/html", "UTF-8", null);
         String result = mWebView.toString();
+        editResolucao.setText(result);
         return result;
     }
     public String localHTML(Context context) {
@@ -323,6 +331,7 @@ public class CadastrarResolucao extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.w("pagina", stringBuilder.toString());
         return stringBuilder.toString();
     }
 

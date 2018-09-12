@@ -23,11 +23,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class ProcessSingleImageTask extends AsyncTask<File, Object, String> {
+public class ProcessSingleImageTask extends AsyncTask<File, Object, DetectionResult> {
 
     private static final String TAG = ProcessSingleImageTask.class.getSimpleName();
     @Override
-    protected String doInBackground(File... params) {
+    protected DetectionResult doInBackground(File... params) {
         if (params.length > 0) {
             File imageFile = params[0];
             byte[] arraysBytes;
@@ -55,9 +55,9 @@ public class ProcessSingleImageTask extends AsyncTask<File, Object, String> {
                                 .post(requestBody)
                                 .build();
                         Response response = client.newCall(request).execute();
-                        ResponseBody responseBody = response.body();
-                        String responseString = responseBody.toString();
-                        DetectionResult detectionResult = new Gson().fromJson(responseString, DetectionResult.class);
+                        DetectionResult detectionResult = new Gson().fromJson(response.body().string(),DetectionResult.class);
+                        //String teste = new  Gson().fromJson(response.body().string(),String.class);
+
                         if (!response.isSuccessful()) {
                             Log.d(TAG, "Deu errado");
                             Log.d(TAG,response.message());
@@ -65,34 +65,35 @@ public class ProcessSingleImageTask extends AsyncTask<File, Object, String> {
                             Log.d(TAG, "Deu certo");
                         }
                         if (response == null) {
-                            return "Error: Server connection error";
+                            return null;
                         } else {
+                            ResponseBody responseBody = response.body();
                             if (responseBody == null) {
-                                return "Error: Server connection error";
+                                return null;
                             }
-                            return detectionResult.latex;
+                            return detectionResult;
                         }
                     }else{
-                        return "Error: Image file does not exist";
+                        return null;
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    return "Error: Image file does not exist";
+                    return null;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return "Error: Server connection error";
+                    return null;
                 }
             } else {
-                return "No input image file";
+                return null;
             }
         }
-        return "No input image file";
+        return null;
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(DetectionResult s) {
         super.onPostExecute(s);
         //Log response string
-        Log.e(TAG, s);
+        Log.e(TAG, s.latex);
     }
 }
