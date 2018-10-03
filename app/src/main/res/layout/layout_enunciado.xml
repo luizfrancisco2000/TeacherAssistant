@@ -86,6 +86,12 @@ android:layout_height="match_parent">
         android:clickable="true"
         app:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/ic_menu_send" />
+    <WebView
+        android:layout_width="wrap_content"
+        android:id="@+id/webViewEnun"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        />
 
 </LinearLayout>
 </ScrollView>

@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -110,15 +111,15 @@ public class CadastrarResolucao extends AppCompatActivity {
         concluirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                questao.convertStringForArray(editResolucao.getText().toString());
-                if (questao.getResolucao().size() == 1) {
-                    questao.salvar();
+                questao.convertStringForArray(latex);
+                //if (questao.getResolucao().size() == 1) {
+                    //questao.salvar();
                     Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
-                    Toast.makeText(CadastrarResolucao.this, "Casdastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadastrarResolucao.this, "Cadastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
-                } else {
-                    atualizarBanco();
-                }
+                //} else {
+                  //  atualizarBanco();
+                //}
 
             }
         });
@@ -171,8 +172,7 @@ public class CadastrarResolucao extends AppCompatActivity {
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                String test = loadLocalContent();
-                Log.d("Desencargo",test);
+                //String test = loadLocalContent();
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -285,7 +285,7 @@ public class CadastrarResolucao extends AppCompatActivity {
                 super.onPageFinished(view, url);
                 final String js = "javascript.setLatex('" + latex + "')";
                 if (mWebView != null) {
-                    Log.w("seila","aaaaa");
+                    //Log.w("seila","aaaaa");
                     mWebView.loadUrl(js);
                 }else{
 
@@ -307,9 +307,7 @@ public class CadastrarResolucao extends AppCompatActivity {
         String localURL = "file:///android_asset/";
         String htmlString = localHTML(getApplicationContext());
         mWebView.loadDataWithBaseURL(localURL, htmlString, "text/html", "UTF-8", null);
-        String result = mWebView.toString();
-        editResolucao.setText(result);
-        return result;
+        return latex;
     }
     public String localHTML(Context context) {
         StringBuilder stringBuilder = new StringBuilder();

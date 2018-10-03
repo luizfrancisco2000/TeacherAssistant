@@ -50,16 +50,18 @@ public class Questao {
         int auxiliar=0;
         ArrayList<String> res = new ArrayList<>();
         for(int i = 0; i<correta.length();i++){
-            if(correta.charAt(i)=='\n'){
-                String texto = correta.subSequence(auxiliar,i).toString();
-                auxiliar=i+1;
-                res.add(texto);
+            if(correta.charAt(i)=='\\'){
+                if(correta.charAt(i+1)=='\\'){
+                  Log.d("Teste", correta.substring(auxiliar, i));
+                  auxiliar=i+2;
+                }
+                //res.add(texto);
                 i++;
             }
         }
         ArrayList<ArrayList<String>> teste = new ArrayList<>();
         teste.add(res);
-        if(resolucao.size()==0 || resolucao==null){
+        if(resolucao==null){
             resolucao = teste;
         }else{
             teste = resolucao;
