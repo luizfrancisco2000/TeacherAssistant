@@ -172,7 +172,7 @@ public class CadastrarResolucao extends AppCompatActivity {
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                //String test = loadLocalContent();
+                String test = loadLocalContent();
             } else {
                 Log.d("a", "arquivo não existe");
             }

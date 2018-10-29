@@ -353,6 +353,9 @@ public class CadastrarEnunciado extends AppCompatActivity{
         });
     }
 
+    /**Parte de processamento de texto
+     * Por favor não mexa*/
+
     public String loadLocalContent() {
         mWebView.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -362,7 +365,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 super.onPageFinished(view, url);
                 final String js = "javascript.setLatex('" + latex + "')";
                 if (mWebView != null) {
-               //     Log.w("seila","aaaaa");
+                    //Log.w("seila","aaaaa");
                     mWebView.loadUrl(js);
                 }else{
 
@@ -408,6 +411,10 @@ public class CadastrarEnunciado extends AppCompatActivity{
         }
         Log.w("pagina", stringBuilder.toString());
         return stringBuilder.toString();
+    }
+
+    private void showErrorAndReset(String errMessage) {
+        Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
     }
 
     private void abrirTelaPrincipal() {

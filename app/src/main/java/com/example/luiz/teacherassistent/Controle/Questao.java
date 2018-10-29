@@ -25,12 +25,14 @@ public class Questao {
 
     public Questao() {
     }
-    public void salvar(){
+
+    public void salvar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(getMateria())).child(String.valueOf(getAssunto())).setValue(this);
     }
+
     @Exclude
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         HashMap<String, Object> hashMapQuestao = new HashMap<>();
         hashMapQuestao.put("materia", getMateria());
         hashMapQuestao.put("enunciado", getEnunciado());
@@ -46,29 +48,35 @@ public class Questao {
         this.enunciado = enunciado;
     }
 
-    public void convertStringForArray(String correta){
-        int auxiliar=0;
+    public void convertStringForArray(String correta) {
+        int auxiliar = 0;
+        String texto = "";
         ArrayList<String> res = new ArrayList<>();
-        for(int i = 0; i<correta.length();i++){
-            if(correta.charAt(i)=='\\'){
-                if(correta.charAt(i+1)=='\\'){
-                  Log.d("Teste", correta.substring(auxiliar, i));
-                  auxiliar=i+2;
+        for (int i = 0; i < correta.length(); i++) {
+            if (correta.charAt(i) == '\\') {
+                if (correta.charAt(i + 1) == '\\') {
+                    texto = correta.substring(auxiliar, i);
+                    Log.d("Teste", texto);
+                    auxiliar = i + 2;
                 }
-                //res.add(texto);
+                res.add(texto);
                 i++;
             }
         }
+        texto = correta.substring(auxiliar,correta.length()-1);
+        Log.d("Teste1: ", texto);
+        res.add(texto);
         ArrayList<ArrayList<String>> teste = new ArrayList<>();
         teste.add(res);
-        if(resolucao==null){
+        if (resolucao == null) {
             resolucao = teste;
-        }else{
+        } else {
             teste = resolucao;
             teste.add(res);
-            resolucao=teste;
+            resolucao = teste;
         }
     }
+
     public String getMateria() {
         return materia;
     }
@@ -85,20 +93,23 @@ public class Questao {
         return resolucao;
     }
 
-    public Correcao exportResolucao(){
+    public Correcao exportResolucao() {
         correcao = new Correcao();
         correcao.setResolucaoCorreta(getResolucao());
         return correcao;
     }
-    public static Questao getInstance(){
-        if(getInstance==null){
+
+    public static Questao getInstance() {
+        if (getInstance == null) {
             getInstance = new Questao();
         }
         return getInstance;
     }
-    public static void setInstance(Questao questao){
+
+    public static void setInstance(Questao questao) {
         getInstance = questao;
     }
+
     public String getAssunto() {
         return assunto;
     }
