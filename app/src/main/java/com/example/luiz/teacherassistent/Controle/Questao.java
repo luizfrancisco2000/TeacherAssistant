@@ -58,23 +58,18 @@ public class Questao {
                     texto = correta.substring(auxiliar, i);
                     Log.d("Teste", texto);
                     auxiliar = i + 2;
+                    res.add(texto);
                 }
-                res.add(texto);
                 i++;
             }
         }
         texto = correta.substring(auxiliar,correta.length()-1);
         Log.d("Teste1: ", texto);
         res.add(texto);
-        ArrayList<ArrayList<String>> teste = new ArrayList<>();
-        teste.add(res);
-        if (resolucao == null) {
-            resolucao = teste;
-        } else {
-            teste = resolucao;
-            teste.add(res);
-            resolucao = teste;
+        if(resolucao==null){
+            resolucao = new ArrayList<>();
         }
+        resolucao.add(res);
     }
 
     public String getMateria() {

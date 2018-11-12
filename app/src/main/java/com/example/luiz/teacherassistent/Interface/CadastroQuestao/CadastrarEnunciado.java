@@ -269,7 +269,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
         }
 
     }
-    /*public void buscarBancoDeDados(){
+    public void buscarBancoDeDados(){
         DatabaseReference mRef =  FirebaseDatabase.getInstance().getReference();
         Log.d("Erro1", questao.getEnunciado());
         mRef.child("questao").child(questao.getMateria()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -306,7 +306,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 dialogInterface.cancel();
             }
         });
-    }*/
+    }
 
 
 
@@ -359,14 +359,26 @@ public class CadastrarEnunciado extends AppCompatActivity{
     public String loadLocalContent() {
         mWebView.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebViewClient(new WebViewClient() {
+        WebSettings settings = mWebView.getSettings();
+        /*mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                final String js = "javascript.setLatex('" + latex + "')";
                 if (mWebView != null) {
                     //Log.w("seila","aaaaa");
-                    mWebView.loadUrl(js);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    InputStream json;
+                    try {
+                        json = getApplicationContext().getAssets().open("MathJax.js");
+                        BufferedReader in = new BufferedReader(new InputStreamReader(json));
+                        String str;
+                        while ((str = in.readLine()) != null) {
+                            stringBuilder.append(str);
+                        }
+                        mWebView.loadUrl(str);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }else{
 
                 }
@@ -376,29 +388,48 @@ public class CadastrarEnunciado extends AppCompatActivity{
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return true;
             }
-        });
-        WebSettings settings = mWebView.getSettings();
+        });*/
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
         if (Build.VERSION.SDK_INT >= 16) {
             settings.setAllowFileAccessFromFileURLs(true);
             settings.setAllowUniversalAccessFromFileURLs(true);
         }
-        String localURL = "file:///android_asset/";
+        String localURL = "file:///android_asset";
         String htmlString = localHTML(getApplicationContext());
-        mWebView.loadDataWithBaseURL(localURL, htmlString, "text/html", "UTF-8", null);
+        String newHTML = procuraP(htmlString);
+        mWebView.loadDataWithBaseURL(localURL, newHTML, "text/html", "UTF-8", null);
         return latex;
+    }
+
+    public String procuraP(String p){
+        String aux=null;
+        for(int i=0;i<p.length();i++){
+            if(p.charAt(i)=='<' && p.charAt(i+1)=='p' && p.charAt(i+2)=='>'){
+                aux = p.substring(0,i+3);
+                aux+="\\[ "+latex+" \\]";
+            }
+            if(p.charAt(i)=='<' && p.charAt(i+1)=='/' && p.charAt(i+2)=='p' && p.charAt(i+3)=='>'){
+                aux+=p.substring(i,p.length());
+            }
+        }
+        if(aux!=null){
+            Log.d("NOVO HTML",aux);
+            return aux;
+        }else{
+            return "TEXT NOT FOUND";
+        }
     }
     public String localHTML(Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         InputStream json;
         try {
-            if(context.getAssets().open("latex.html")==null){
+            if(context.getAssets().open("test/index.html")==null){
                 Log.d("Dont","Existe");
             }else{
                 Log.w("Funcionou","oooooooooooo");
             }
-            json = context.getAssets().open("latex.html");
+            json = context.getAssets().open("test/index.html");
             BufferedReader in = new BufferedReader(new InputStreamReader(json));
             String str;
 
@@ -409,7 +440,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.w("pagina", stringBuilder.toString());
+       Log.w("pagina", stringBuilder.toString());
         return stringBuilder.toString();
     }
 

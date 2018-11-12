@@ -78,6 +78,11 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:background="@drawable/fotos" />
 
+    <WebView
+        android:id="@+id/webViewEnun"
+        android:layout_width="fill_parent"
+        android:layout_height="141dp"
+        android:visibility="invisible" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/ContinuarProcessoCad"
         android:layout_width="match_parent"
@@ -86,12 +91,7 @@ android:layout_height="match_parent">
         android:clickable="true"
         app:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/ic_menu_send" />
-    <WebView
-        android:layout_width="wrap_content"
-        android:id="@+id/webViewEnun"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        />
+
 
 </LinearLayout>
 </ScrollView>

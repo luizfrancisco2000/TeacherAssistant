@@ -35,23 +35,37 @@ public class Correcao {
         return resolucaoCorreta;
     }
     public void convertStringForArray(String correta){
-        int auxiliar=0;
+        int auxiliar = 0;
+        String texto = "";
         ArrayList<String> res = new ArrayList<>();
-        for(int i = 0; i<correta.length();i++){
-            if(correta.charAt(i)=='\n'){
-                String texto = correta.subSequence(auxiliar,i).toString();
-                auxiliar=i+1;
-                res.add(texto);
+        for (int i = 0; i < correta.length(); i++) {
+            if (correta.charAt(i) == '\\') {
+                if (correta.charAt(i + 1) == '\\') {
+                    texto = correta.substring(auxiliar, i);
+                    Log.d("Teste", texto);
+                    auxiliar = i + 2;
+                    res.add(texto);
+                }
                 i++;
             }
+        }
+        if(texto.length()!=0){
+            texto = correta.substring(auxiliar,correta.length()-1);
+        }else{
+            texto = correta.substring(auxiliar,correta.length());
+        }
+        Log.d("Teste1: ", texto);
+        res.add(texto);
+        if(resolucaoUser==null){
+            resolucaoUser = new ArrayList<>();
         }
         resolucaoUser = res;
     }
     public String corrigir() {
-        String status = null;
+       /* String status = null;
         String erro = "";
         ArrayList<String> erros = new ArrayList<>();
-        /*for(ArrayList<String> q: resolucaoCorreta) {
+        for(ArrayList<String> q: resolucaoCorreta) {
             for (int i = 0; i < q.size(); i++) {
                 Log.d("Teste", resolucaoUser.get(i));
                 for (int j = 0; j < resolucaoUser.size(); j++) {
@@ -79,7 +93,7 @@ public class Correcao {
             }else{
                 erro=erros.get(0);
             }
-        }*/
+        }
     for(int q=0; q<resolucaoCorreta.size();q++){
         for (int i = 0; i < resolucaoCorreta.get(q).size(); i++) {
             for (int j = 0; j < resolucaoUser.size(); j++) {
@@ -107,7 +121,34 @@ public class Correcao {
         }else{
             erro=erros.get(0);
         }
-        return erro;
+        return erro;*/
+       boolean certo = false;
+       for(ArrayList<String> correta:resolucaoCorreta){
+           for (int i = 0; i < correta.size(); i++) {
+               Log.d("Teste", resolucaoUser.get(i));
+               for (int j = 0; j < resolucaoUser.size(); j++) {
+                   Log.d("Teste2", resolucaoUser.get(j));
+                   Log.d("Teste3", correta.get(i));
+                   if (correta.get(i).equals(resolucaoUser.get(j))) {
+                       certo = true;
+                   }else{
+                       auxiliar=1000;
+                       if(auxiliar < j){
+                           auxiliar=j;
+                           certo = false;
+                            erro=""+j;
+                       }
+                   }
+                   Log.d("SITUACAO", String.valueOf(certo));
+               }
+           }
+
+       }
+       if(certo=true){
+            return "";
+       }else{
+            return erro;
+       }
     }
     public static Correcao getInstance(){
         if(getInstance==null){
