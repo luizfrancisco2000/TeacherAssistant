@@ -85,13 +85,18 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
             public void onClick(View view) {
                 correcao.convertStringForArray(latex);
                 String erroString = correcao.corrigir();
+                Log.d("ERRO LINHA", erroString);
                 if(!erroString.equals("")){
                     correcao.setErro(erroString);
+                    Log.d("IF CERTO", erroString);
+                    Log.d("IF CERTO", erroString);
                     Correcao.setInstance(correcao);
                     Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ErradoAluno.class);
                     startActivity(intent);
                 }
                 else{
+
+                    Log.d("IF ERRADO", erroString);
                     Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, CorretoAluno.class);
                     startActivity(intent);
                 }

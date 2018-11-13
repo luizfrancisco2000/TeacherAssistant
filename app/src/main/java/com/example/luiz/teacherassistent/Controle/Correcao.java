@@ -62,67 +62,9 @@ public class Correcao {
         resolucaoUser = res;
     }
     public String corrigir() {
-       /* String status = null;
-        String erro = "";
-        ArrayList<String> erros = new ArrayList<>();
-        for(ArrayList<String> q: resolucaoCorreta) {
-            for (int i = 0; i < q.size(); i++) {
-                Log.d("Teste", resolucaoUser.get(i));
-                for (int j = 0; j < resolucaoUser.size(); j++) {
-                    Log.d("Teste2", resolucaoUser.get(j));
-                    Log.d("Teste3", q.get(i));
-                    if (q.get(i).equals(resolucaoUser.get(j))) {
-                        i++;
-                        status = "tá certinho";
-                        erros.clear();
-                        erro = "";
-                    } else {
-                        status = null;
-                        erro = "" + j;
-                        erros.add(erro);
-                    }
-                    if (status != null && j==resolucaoUser.size()-1){
-                        Log.d("Status", status);
-                        return erro;
-                    }
-                }
-                i = resolucaoCorreta.size();
-            }
-            if(erros.isEmpty() || erros.size()==0) {
-                erro = "";
-            }else{
-                erro=erros.get(0);
-            }
-        }
-    for(int q=0; q<resolucaoCorreta.size();q++){
-        for (int i = 0; i < resolucaoCorreta.get(q).size(); i++) {
-            for (int j = 0; j < resolucaoUser.size(); j++) {
-                Log.d("Teste2", resolucaoUser.get(j));
-                Log.d("Teste3", resolucaoCorreta.get(q).get(i));
-                if (resolucaoCorreta.get(q).get(i).equals(resolucaoUser.get(j))) {
-                    i++;
-                    status = "tá certinho";
-                    erros.clear();
-                    erro = "";
-                } else {
-                    status = null;
-                    erro = "" + j;
-                    erros.add(erro);
-                }
-                if (status != null && j == resolucaoUser.size() - 1) {
-                    Log.d("Status", status);
-                    return erro;
-                }
-            }
-        }
-    }
-        if(erros.isEmpty() || erros.size()==0) {
-            erro = "";
-        }else{
-            erro=erros.get(0);
-        }
-        return erro;*/
+        auxiliar=1001;
        boolean certo = false;
+       erro="";
        for(ArrayList<String> correta:resolucaoCorreta){
            for (int i = 0; i < correta.size(); i++) {
                Log.d("Teste", resolucaoUser.get(i));
@@ -132,19 +74,19 @@ public class Correcao {
                    if (correta.get(i).equals(resolucaoUser.get(j))) {
                        certo = true;
                    }else{
-                       auxiliar=1000;
-                       if(auxiliar < j){
+                       if(auxiliar < j || auxiliar>1000){
                            auxiliar=j;
                            certo = false;
                             erro=""+j;
                        }
                    }
                    Log.d("SITUACAO", String.valueOf(certo));
+                   Log.d("SITUACAO ERRO", erro);
                }
            }
 
        }
-       if(certo=true){
+       if(certo==true){
             return "";
        }else{
             return erro;
