@@ -27,4 +27,9 @@ public class CorretoAluno extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(CorretoAluno.this, MenuAluno.class);
+        startActivity(intent);
+    }
 }

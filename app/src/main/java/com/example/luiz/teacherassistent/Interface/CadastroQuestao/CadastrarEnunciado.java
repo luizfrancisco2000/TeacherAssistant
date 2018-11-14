@@ -39,6 +39,7 @@ import com.example.luiz.teacherassistent.Controle.Questao;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
+import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
 import com.example.luiz.teacherassistent.Interface.LoginUsuarios.LoginProfessor;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
@@ -66,14 +67,14 @@ import java.util.concurrent.ExecutionException;
  * Created by Chico on 28/02/2018.
  */
 
-public class CadastrarEnunciado extends AppCompatActivity{
+public class CadastrarEnunciado extends AppCompatActivity {
     //botões
     private Button fotoEnunciado;
     private EditText editEnunciado;
     private Spinner assuntos;
-    private  ImageView imagemEnunciado;
+    private ImageView imagemEnunciado;
     private final int GALERIA_IMAGENS = 1;
-    private  FloatingActionButton continuarCadastro;
+    private FloatingActionButton continuarCadastro;
     private RadioButton radioFisica;
     private RadioButton radioQuimica;
     private RadioButton radioMatematica;
@@ -81,7 +82,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
     private TextView disciplina;
     private AlertDialog alert;
     //constantes e variaveis
-    private final int  PERMISSAO_REQUEST =2;
+    private final int PERMISSAO_REQUEST = 2;
     Questao questao;
     Professor professor;
     // ferramentas
@@ -93,8 +94,9 @@ public class CadastrarEnunciado extends AppCompatActivity{
     private File imageFile;
     private String realPath;
     private WebView mWebView;
+
     @Override
-    protected void onCreate(final Bundle onSaveInstanceState){
+    protected void onCreate(final Bundle onSaveInstanceState) {
         super.onCreate(onSaveInstanceState);
         super.setContentView(R.layout.layout_enunciado);
         fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
@@ -122,47 +124,46 @@ public class CadastrarEnunciado extends AppCompatActivity{
         });
         professor = Professor.getInstance();
 
-        Log.d("Teste",professor.getMateria());
-        if(!professor.equals(null)){
-            if(professor.getMateria().equals("fisica")){
+        Log.d("Teste", professor.getMateria());
+        if (!professor.equals(null)) {
+            if (professor.getMateria().equals("fisica")) {
                 radioFisica.setChecked(true);
-            }else if(professor.getMateria().equals("quimica")){
+            } else if (professor.getMateria().equals("quimica")) {
                 radioFisica.setChecked(true);
-            }else if(professor.getMateria().equals("matematica")){
+            } else if (professor.getMateria().equals("matematica")) {
                 radioFisica.setChecked(true);
             }
-        }
-        else{
+        } else {
             Intent intent = new Intent(CadastrarEnunciado.this, MenuProfessor.class);
             startActivity(intent);
         }
-        if(radioFisica.isChecked()){
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+        if (radioFisica.isChecked()) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             assuntos.setAdapter(adapter);
-        }else if(radioQuimica.isChecked()){
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+        } else if (radioQuimica.isChecked()) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.quimica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             assuntos.setAdapter(adapter);
-        }else if(radioMatematica.isChecked()){
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+        } else if (radioMatematica.isChecked()) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.matematica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             assuntos.setAdapter(adapter);
         }
         radioQuimica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    radioQuimica.setChecked(true);
-                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
-                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                    assuntos.setAdapter(adapter);
+                radioQuimica.setChecked(true);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.quimica_assuntos, R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                assuntos.setAdapter(adapter);
             }
         });
         radioFisica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 radioFisica.setChecked(true);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
             }
@@ -171,7 +172,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 radioMatematica.setChecked(true);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.matematica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
             }
@@ -181,30 +182,50 @@ public class CadastrarEnunciado extends AppCompatActivity{
             public void onClick(View view) {
                 mWebView.stopLoading();
                 questao = new Questao();
-                questao.setEnunciado(latex);
+                if(latex=="")
+                    questao.setEnunciado(editEnunciado.getText().toString()==null?editEnunciado.getText().toString():null);
+                  else
+                    questao.setEnunciado(latex);
                 //professor.setAtivo(false);
                 if (radioFisica.isChecked()) {
                     questao.setMateria("fisica");
                     int aux;
                     questao.setAssunto(assuntos.getSelectedItem().toString());
-                    procurarQuestao();
-                }else if (radioMatematica.isChecked()) {
+
+                } else if (radioMatematica.isChecked()) {
                     questao.setMateria("matematica");
                     questao.setAssunto(assuntos.getSelectedItem().toString());
-                    procurarQuestao();
+
                 } else if (radioQuimica.isChecked()) {
                     questao.setAssunto(assuntos.getSelectedItem().toString());
                     questao.setMateria("quimica");
-                    procurarQuestao();
+
                 } else {
                     disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
                     disciplina.setTextColor(Color.RED);
-                    onCreate(onSaveInstanceState);
+
+                }
+                if (questao.getAssunto() == null || questao.getEnunciado() == null || questao.getMateria() == null) {
+                    aviso();
+                } else {
+                    procurarQuestao();
                 }
             }
         });
     }
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    private void aviso() {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+        alerta.setTitle("Atenção").setMessage("Por favor veja se tem algum campo incorreto");
+        alerta.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                onStop();
+            }
+        });
+        alerta.create().show();
+    }
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
 
@@ -229,7 +250,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
 
         imageFile = new File(realPath);
         Uri uriFromPath = Uri.fromFile(imageFile);
-        String resultFile = realPath.substring(realPath.lastIndexOf(System.getProperty("file.separator"))+1,realPath.length());
+        String resultFile = realPath.substring(realPath.lastIndexOf(System.getProperty("file.separator")) + 1, realPath.length());
         // you have two ways to display selected image
 
         // ( 1 ) imageView.setImageURI(uriFromPath);
@@ -241,10 +262,13 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                String test = loadLocalContent();
-
-                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
-                imagemEnunciado.setImageBitmap(bitmapReduzido);
+                if (latex.equals("")) {
+                    Toast.makeText(this, "Erro ao ler a imagem...\n Por favor verique que o cálculo está aparecendo ou tire outra foto ", Toast.LENGTH_SHORT).show();
+                } else {
+                    String test = loadLocalContent();
+                    Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                    imagemEnunciado.setImageBitmap(bitmapReduzido);
+                }
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -255,23 +279,26 @@ public class CadastrarEnunciado extends AppCompatActivity{
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        imagemEnunciado.setImageBitmap(bitmap);
 
         Log.d("HMKCODE", "Build.VERSION.SDK_INT:" + sdk);
         Log.d("HMKCODE", "URI Path:" + uriPath);
         Log.d("HMKCODE", "Real Path: " + realPath);
     }
-    public void validarPermissao(){
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)){
 
-            }else{
-                ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},PERMISSAO_REQUEST);
+    public void validarPermissao() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSAO_REQUEST);
             }
         }
 
     }
-    public void buscarBancoDeDados(){
-        DatabaseReference mRef =  FirebaseDatabase.getInstance().getReference();
+
+    public void buscarBancoDeDados() {
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
         Log.d("Erro1", questao.getEnunciado());
         mRef.child("questao").child(questao.getMateria()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -279,18 +306,19 @@ public class CadastrarEnunciado extends AppCompatActivity{
                 if (dataSnapshot.exists()) {
                     Questao questao = dataSnapshot.getValue(Questao.class);
                     erroDeBusca(questao);
-                }
-                else{
+                } else {
                     Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
                     startActivity(intent);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
+
     private void erroDeBusca(Questao questao) {
         AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
         alerta.setTitle("Atenção").setMessage("Questao já cadsatrada" + questao.getMateria() + "\nDeseja continuar?");
@@ -310,52 +338,52 @@ public class CadastrarEnunciado extends AppCompatActivity{
     }
 
 
-
     private void procurarQuestao() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
                 String.valueOf(questao.getAssunto())).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(final DataSnapshot dataSnapshot) {
-                        try{
-                            if(dataSnapshot.getValue(Questao.class).getEnunciado()!=null){
-                                if(dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())){
-                                    AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                                    alerta.setTitle("Atenção").setMessage("Questao já cadsatrada: " + questao.getMateria() + "\n Deseja continuar?");
-                                    alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            questao = dataSnapshot.getValue(Questao.class);
-                                            abrirTelaPrincipal();
-                                        }
-                                    });
-                                    alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.cancel();
-                                        }
-                                    });
-                                    alert = alerta.create();
-                                    alert.show();
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
+                        if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+                            alerta.setTitle("Atenção").setMessage("Questao já cadsatrada: " + questao.getMateria() + "\n Deseja continuar?");
+                            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    questao = dataSnapshot.getValue(Questao.class);
+                                    abrirTelaPrincipal();
                                 }
-                            }
-                            else{
-                                abrirTelaPrincipal();
-                            }
-                        }catch(Exception e){
-                            abrirTelaPrincipal();
+                            });
+                            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                            alert = alerta.create();
+                            alert.show();
                         }
+                    } else {
+                        abrirTelaPrincipal();
                     }
+                } catch (Exception e) {
+                    abrirTelaPrincipal();
+                }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
+            }
         });
     }
 
-    /**Parte de processamento de texto
-     * Por favor não mexa*/
+    /**
+     * Parte de processamento de texto
+     * Por favor não mexa
+     */
 
     public String loadLocalContent() {
         mWebView.setVisibility(View.VISIBLE);
@@ -403,32 +431,33 @@ public class CadastrarEnunciado extends AppCompatActivity{
         return latex;
     }
 
-    public String procuraP(String p){
-        String aux=null;
-        for(int i=0;i<p.length();i++){
-            if(p.charAt(i)=='<' && p.charAt(i+1)=='p' && p.charAt(i+2)=='>'){
-                aux = p.substring(0,i+3);
-                aux+="\\[ "+latex+" \\]";
+    public String procuraP(String p) {
+        String aux = null;
+        for (int i = 0; i < p.length(); i++) {
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == 'p' && p.charAt(i + 2) == '>') {
+                aux = p.substring(0, i + 3);
+                aux += "\\[ " + latex + " \\]";
             }
-            if(p.charAt(i)=='<' && p.charAt(i+1)=='/' && p.charAt(i+2)=='p' && p.charAt(i+3)=='>'){
-                aux+=p.substring(i,p.length());
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == '/' && p.charAt(i + 2) == 'p' && p.charAt(i + 3) == '>') {
+                aux += p.substring(i, p.length());
             }
         }
-        if(aux!=null){
-            Log.d("NOVO HTML",aux);
+        if (aux != null) {
+            Log.d("NOVO HTML", aux);
             return aux;
-        }else{
+        } else {
             return "TEXT NOT FOUND";
         }
     }
+
     public String localHTML(Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         InputStream json;
         try {
-            if(context.getAssets().open("test/index.html")==null){
-                Log.d("Dont","Existe");
-            }else{
-                Log.w("Funcionou","oooooooooooo");
+            if (context.getAssets().open("test/index.html") == null) {
+                Log.d("Dont", "Existe");
+            } else {
+                Log.w("Funcionou", "oooooooooooo");
             }
             json = context.getAssets().open("test/index.html");
             BufferedReader in = new BufferedReader(new InputStreamReader(json));
@@ -441,7 +470,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
-       Log.w("pagina", stringBuilder.toString());
+        Log.w("pagina", stringBuilder.toString());
         return stringBuilder.toString();
     }
 
@@ -451,7 +480,7 @@ public class CadastrarEnunciado extends AppCompatActivity{
 
     private void abrirTelaPrincipal() {
         Questao.setInstance(questao);
-        Intent intent = new Intent(CadastrarEnunciado.this,CadastrarResolucao.class);
+        Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
         startActivity(intent);
     }
 }

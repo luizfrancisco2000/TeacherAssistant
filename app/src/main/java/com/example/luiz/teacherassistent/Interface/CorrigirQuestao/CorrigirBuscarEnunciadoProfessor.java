@@ -15,10 +15,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuAluno;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
 
 import java.io.BufferedReader;
@@ -99,10 +102,13 @@ public class CorrigirBuscarEnunciadoProfessor extends AppCompatActivity{
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                String test = loadLocalContent();
-
-                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
-                imagemEnunciado.setImageBitmap(bitmapReduzido);
+                if (latex.equals("")) {
+                    Toast.makeText(this, "Erro ao ler a imagem...\n Por favor verique que o cálculo está aparecendo ou tire outra foto ", Toast.LENGTH_SHORT).show();
+                } else {
+                    String test = loadLocalContent();
+                    Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                    imagemEnunciado.setImageBitmap(bitmapReduzido);
+                }
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -208,5 +214,9 @@ public class CorrigirBuscarEnunciadoProfessor extends AppCompatActivity{
         Log.w("pagina", stringBuilder.toString());
         return stringBuilder.toString();
     }
-
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(CorrigirBuscarEnunciadoProfessor.this,MenuProfessor.class);
+        startActivity(intent);
+    }
 }

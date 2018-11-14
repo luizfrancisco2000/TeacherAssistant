@@ -67,17 +67,14 @@ public class Correcao {
        erro="";
        for(ArrayList<String> correta:resolucaoCorreta){
            for (int i = 0; i < correta.size(); i++) {
-               Log.d("Teste", resolucaoUser.get(i));
                for (int j = 0; j < resolucaoUser.size(); j++) {
-                   Log.d("Teste2", resolucaoUser.get(j));
-                   Log.d("Teste3", correta.get(i));
                    if (correta.get(i).equals(resolucaoUser.get(j))) {
                        certo = true;
                    }else{
                        if(auxiliar < j || auxiliar>1000){
                            auxiliar=j;
                            certo = false;
-                            erro=""+j;
+                            erro=""+(j+1);
                        }
                    }
                    Log.d("SITUACAO", String.valueOf(certo));

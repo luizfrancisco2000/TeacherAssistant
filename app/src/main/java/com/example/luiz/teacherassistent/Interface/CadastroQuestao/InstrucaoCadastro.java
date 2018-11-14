@@ -25,4 +25,8 @@ public class InstrucaoCadastro extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed(){
+
+    }
 }

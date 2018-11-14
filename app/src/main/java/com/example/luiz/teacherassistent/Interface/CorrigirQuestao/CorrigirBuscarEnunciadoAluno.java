@@ -72,7 +72,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     private EditText editEnunciado;
     private ImageView imagemEnunciado;
     protected final int GALERIA_IMAGENS = 1;
-    private  FloatingActionButton continuarResolucao;
+    private FloatingActionButton continuarResolucao;
     private RadioButton radioFisica;
     private RadioButton radioQuimica;
     private RadioButton radioMatematica;
@@ -80,7 +80,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     private TextView disciplina;
     private Spinner assuntos;
     //constantes e variaveis
-    private final int  PERMISSAO_REQUEST =2;
+    private final int PERMISSAO_REQUEST = 2;
     private Questao questao;
     private Aluno aluno;
     private Correcao correcao;
@@ -104,7 +104,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         radioMatematica = (RadioButton) findViewById(R.id.radioMatematica);
         radioQuimica = (RadioButton) findViewById(R.id.radioQuimica);
         materiasRadio = (RadioGroup) findViewById(R.id.radioMaterias);
-        disciplina = (TextView) findViewById(R.id.DisciplinaProf);
+        disciplina = (TextView) findViewById(R.id.DisciplinaEnunciado);
         assuntos = (Spinner) findViewById(R.id.assunto);
         mWebView = (WebView) findViewById(R.id.webViewEnun);
         validarPermissao();
@@ -119,16 +119,16 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
-        if(radioFisica.isChecked()){
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+        if (radioFisica.isChecked()) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             assuntos.setAdapter(adapter);
-        }else if(radioQuimica.isChecked()){
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+        } else if (radioQuimica.isChecked()) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.quimica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             assuntos.setAdapter(adapter);
-        }else if(radioMatematica.isChecked()){
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+        } else if (radioMatematica.isChecked()) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.matematica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             assuntos.setAdapter(adapter);
         }
@@ -136,7 +136,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 radioQuimica.setChecked(true);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.quimica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.quimica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
             }
@@ -145,7 +145,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 radioFisica.setChecked(true);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.fisica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
             }
@@ -154,7 +154,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 radioMatematica.setChecked(true);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this,R.array.matematica_assuntos,R.layout.support_simple_spinner_dropdown_item);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.matematica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
             }
@@ -162,30 +162,55 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         continuarResolucao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    questao = new Questao();
+                questao = new Questao();
+                if(latex=="")
+                    questao.setEnunciado(editEnunciado.getText().toString()==null?editEnunciado.getText().toString():null);
+                else
                     questao.setEnunciado(latex);
-                    //professor.setAtivo(false);
-                    if (radioFisica.isChecked()) {
-                        questao.setMateria("fisica");
-                        questao.setAssunto(assuntos.getSelectedItem().toString());
-                        buscar();
-                    } else if (radioMatematica.isChecked()) {
-                        questao.setMateria("matematica");
-                        questao.setAssunto(assuntos.getSelectedItem().toString());
-                        buscar();
-                    } else if (radioQuimica.isChecked()) {
-                        questao.setMateria("quimica");
-                        questao.setAssunto(assuntos.getSelectedItem().toString());
-                        buscar();
-                    } else {
-                        disciplina.setText(disciplina.getText() + "     Campo Obrigatório");
-                        disciplina.setTextColor(Color.RED);
-                        onCreate(savedInstanceState);
-                    }
+                if (radioFisica.isChecked()) {
+                    questao.setMateria("fisica");
+                    questao.setAssunto(assuntos.getSelectedItem().toString());
                     buscar();
+                } else if (radioMatematica.isChecked()) {
+                    questao.setMateria("matematica");
+                    questao.setAssunto(assuntos.getSelectedItem().toString());
+                    buscar();
+                } else if (radioQuimica.isChecked()) {
+                    questao.setMateria("quimica");
+                    questao.setAssunto(assuntos.getSelectedItem().toString());
+                    buscar();
+                } else {
+                    disciplina.setText(disciplina.getText().toString() + "     Campo Obrigatório");
+                    disciplina.setTextColor(Color.RED);
+                }
+                if (questao.getAssunto() == null || questao.getEnunciado() == null || questao.getMateria() == null) {
+                    aviso();
+                } else {
+                    buscar();
+                }
+
             }
         });
     }
+
+    private void aviso() {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
+        alerta.setTitle("Atenção").setMessage("Por favor veja se tem algum campo incorreto");
+        alerta.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                onStop();
+            }
+        });
+        alerta.create().show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
@@ -211,7 +236,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
 
         imageFile = new File(realPath);
         Uri uriFromPath = Uri.fromFile(imageFile);
-        String resultFile = realPath.substring(realPath.lastIndexOf(System.getProperty("file.separator"))+1,realPath.length());
+        String resultFile = realPath.substring(realPath.lastIndexOf(System.getProperty("file.separator")) + 1, realPath.length());
         // you have two ways to display selected image
 
         // ( 1 ) imageView.setImageURI(uriFromPath);
@@ -223,9 +248,13 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                String test = loadLocalContent();
-                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
-                imagemEnunciado.setImageBitmap(bitmapReduzido);
+                if (latex.equals("")) {
+                    Toast.makeText(this, "Erro ao ler a imagem...\n Por favor verique que o cálculo está aparecendo ou tire outra foto ", Toast.LENGTH_SHORT).show();
+                } else {
+                    String test = loadLocalContent();
+                    Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                    imagemEnunciado.setImageBitmap(bitmapReduzido);
+                }
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -242,6 +271,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         Log.d("HMKCODE", "URI Path:" + uriPath);
         Log.d("HMKCODE", "Real Path: " + realPath);
     }
+
     public String loadLocalContent() {
         mWebView.setVisibility(View.VISIBLE);
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -288,32 +318,33 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         return latex;
     }
 
-    public String procuraP(String p){
-        String aux=null;
-        for(int i=0;i<p.length();i++){
-            if(p.charAt(i)=='<' && p.charAt(i+1)=='p' && p.charAt(i+2)=='>'){
-                aux = p.substring(0,i+3);
-                aux+="\\[ "+latex+" \\]";
+    public String procuraP(String p) {
+        String aux = null;
+        for (int i = 0; i < p.length(); i++) {
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == 'p' && p.charAt(i + 2) == '>') {
+                aux = p.substring(0, i + 3);
+                aux += "\\[ " + latex + " \\]";
             }
-            if(p.charAt(i)=='<' && p.charAt(i+1)=='/' && p.charAt(i+2)=='p' && p.charAt(i+3)=='>'){
-                aux+=p.substring(i,p.length());
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == '/' && p.charAt(i + 2) == 'p' && p.charAt(i + 3) == '>') {
+                aux += p.substring(i, p.length());
             }
         }
-        if(aux!=null){
-            Log.d("NOVO HTML",aux);
+        if (aux != null) {
+            Log.d("NOVO HTML", aux);
             return aux;
-        }else{
+        } else {
             return "TEXT NOT FOUND";
         }
     }
+
     public String localHTML(Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         InputStream json;
         try {
-            if(context.getAssets().open("test/index.html")==null){
-                Log.d("Dont","Existe");
-            }else{
-                Log.w("Funcionou","oooooooooooo");
+            if (context.getAssets().open("test/index.html") == null) {
+                Log.d("Dont", "Existe");
+            } else {
+                Log.w("Funcionou", "oooooooooooo");
             }
             json = context.getAssets().open("test/index.html");
             BufferedReader in = new BufferedReader(new InputStreamReader(json));
@@ -330,24 +361,25 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    public void validarPermissao(){
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+    public void validarPermissao() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-            }else{
-                ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},PERMISSAO_REQUEST);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSAO_REQUEST);
             }
         }
 
     }
+
     public void buscar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
                 String.valueOf(questao.getAssunto())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
-                try{
-                    if(dataSnapshot.exists()) {
+                try {
+                    if (dataSnapshot.exists()) {
                         if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
                             Log.d("Vamos lá", dataSnapshot.getValue(Questao.class).getEnunciado());
                             if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
@@ -369,8 +401,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                                         dialogInterface.cancel();
                                     }
                                 });
-                                //alert = alerta.create();
-                                //alert.show();
+                                alerta.create().show();
                             }
                         } else {
                             AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
@@ -388,10 +419,9 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                                     dialogInterface.cancel();
                                 }
                             });
-                            //alert = alerta.create();
-                            //alert.show();
+                            alerta.create().show();
                         }
-                    }else{
+                    } else {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
                         alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
                         alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -407,8 +437,9 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                                 dialogInterface.cancel();
                             }
                         });
+                        alerta.create().show();
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
                     alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
                     alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -434,10 +465,17 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
             }
         });
     }
+
     private void abrirTelaPrincipal() {
-        Log.d("TELA","PRINCIPAL");
+        Log.d("TELA", "PRINCIPAL");
         Correcao.setInstance(correcao);
-        Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this,CorrigirBuscarResolucaoAluno.class);
+        Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, CorrigirBuscarResolucaoAluno.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
         startActivity(intent);
     }
 }

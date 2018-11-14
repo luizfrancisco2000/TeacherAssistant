@@ -117,6 +117,7 @@ public class LoginProfessor extends AppCompatActivity {
     private void abrirTelaPrincipal(Professor professorLogado) {
         if(professorLogado.getAtivo()) {
             barrinha.setProgress(100);
+            barrinha.setVisibility(View.INVISIBLE);
             professor = professorLogado;
             Professor.setInstance(professor);
             Intent intent = new Intent(LoginProfessor.this, MenuProfessor.class);

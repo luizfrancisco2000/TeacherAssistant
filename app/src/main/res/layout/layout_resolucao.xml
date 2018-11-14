@@ -26,6 +26,18 @@
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Texto Processado:"
+            android:textSize="18dp"
+            />
+
+        <WebView
+            android:id="@+id/webViewRes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/FotoResolucao"
@@ -52,12 +64,6 @@
             android:clickable="true"
             app:backgroundTint="?attr/colorPrimary"
             app:srcCompat="@drawable/ic_menu_send" />
-        <WebView
-            android:layout_width="wrap_content"
-            android:id="@+id/webViewRes"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            />
     </LinearLayout>
 </RelativeLayout>
 </ScrollView>

@@ -48,4 +48,10 @@ public class ErradoAluno extends AppCompatActivity{
             }
         });
     }
+    @Override
+    public void onBackPressed(){
+
+        Intent intent = new Intent(ErradoAluno.this, MenuAluno.class);
+        startActivity(intent);
+    }
 }

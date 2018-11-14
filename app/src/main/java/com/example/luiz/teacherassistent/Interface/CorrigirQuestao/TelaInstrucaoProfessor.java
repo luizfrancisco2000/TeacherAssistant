@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.luiz.teacherassistent.Interface.CadastroQuestao.CadastrarEnunciado;
+import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuAluno;
+import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
 
 public class TelaInstrucaoProfessor extends AppCompatActivity {
@@ -23,5 +26,10 @@ public class TelaInstrucaoProfessor extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+            Intent intent = new Intent(TelaInstrucaoProfessor.this, MenuProfessor.class);
+            startActivity(intent);
     }
 }

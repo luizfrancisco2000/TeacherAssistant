@@ -1,6 +1,7 @@
 package com.example.luiz.teacherassistent.Interface.CorrigirQuestao;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
@@ -23,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
@@ -49,13 +52,10 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
     private ImageView fotoResolucaoAluno;
     private FloatingActionButton concluir;
     private Button buttonEscolherFoto;
-    private Bitmap imageGaleria;
-    private TextRecognizer ocrResolucao;
     private File imageFile;
     private String realPath;
     private String latex;
     private WebView mWebView;
-    protected final int GALERIA_IMAGENS = 1;
     private final int  PERMISSAO_REQUEST =2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,28 +82,46 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         });
         concluir.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                correcao.convertStringForArray(latex);
-                String erroString = correcao.corrigir();
-                Log.d("ERRO LINHA", erroString);
-                if(!erroString.equals("")){
-                    correcao.setErro(erroString);
-                    Log.d("IF CERTO", erroString);
-                    Log.d("IF CERTO", erroString);
-                    Correcao.setInstance(correcao);
-                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ErradoAluno.class);
-                    startActivity(intent);
+            public void onClick(View view) { ;
+                String erroString="";
+                if (latex==null) {
+                    aviso();
+                } else {
+                    correcao.convertStringForArray(latex);
+                    erroString = correcao.corrigir();
+                    if(!erroString.equals("")){
+                        correcao.setErro(erroString);
+                        Log.d("IF CERTO", erroString);
+                        Correcao.setInstance(correcao);
+                        Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, ErradoAluno.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        Log.d("IF ERRADO", erroString);
+                        Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, CorretoAluno.class);
+                        startActivity(intent);
+                    }
                 }
-                else{
 
-                    Log.d("IF ERRADO", erroString);
-                    Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this, CorretoAluno.class);
-                    startActivity(intent);
-                }
+
 
             }
         });
 
+
+    }
+
+    private void aviso() {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarResolucaoAluno.this);
+        alerta.setTitle("Atenção").setMessage("Por favor veja se tem algum campo incorreto");
+        alerta.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                onStop();
+            }
+        });
+        alerta.create().show();
     }
     public void validarPermissao(){
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -152,10 +170,13 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                String test = loadLocalContent();
-
-                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
-                fotoResolucaoAluno.setImageBitmap(bitmapReduzido);
+                if (latex.equals("")) {
+                    Toast.makeText(this, "Erro ao ler a imagem...\n Por favor verique que o cálculo está aparecendo ou tire outra foto ", Toast.LENGTH_SHORT).show();
+                } else {
+                    String test = loadLocalContent();
+                    Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                    fotoResolucaoAluno.setImageBitmap(bitmapReduzido);
+                }
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -261,5 +282,9 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         Log.w("pagina", stringBuilder.toString());
         return stringBuilder.toString();
     }
-
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(CorrigirBuscarResolucaoAluno.this,CorrigirBuscarEnunciadoAluno.class);
+        startActivity(intent);
+    }
 }

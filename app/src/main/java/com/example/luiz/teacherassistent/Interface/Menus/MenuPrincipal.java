@@ -35,4 +35,8 @@ public class MenuPrincipal extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed(){
+
+    }
 }

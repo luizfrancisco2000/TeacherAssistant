@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.luiz.teacherassistent.Controle.Aluno;
 import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.TelaInstrucaoAluno;
+import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
 import com.example.luiz.teacherassistent.R;
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,10 +45,13 @@ public class MenuAluno extends AppCompatActivity{
         forum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(MenuAluno.this, ForumAluno.class);
                 startActivity(intent);
             }
         });
     }
+    @Override
+    public void onBackPressed(){
 
+    }
 }

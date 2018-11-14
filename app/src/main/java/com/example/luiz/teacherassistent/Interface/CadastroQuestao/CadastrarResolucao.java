@@ -2,6 +2,7 @@ package com.example.luiz.teacherassistent.Interface.CadastroQuestao;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
@@ -34,6 +36,7 @@ import com.example.luiz.teacherassistent.Controle.Questao;
 import com.example.luiz.teacherassistent.Helper.Base64Custom;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
+import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
@@ -81,8 +84,9 @@ public class CadastrarResolucao extends AppCompatActivity {
     private File imageFile;
     private String realPath;
 
-    /**Processamento de textos
-     * */
+    /**
+     * Processamento de textos
+     */
     private WebView mWebView;
     private String latex;
 
@@ -112,24 +116,34 @@ public class CadastrarResolucao extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 questao.convertStringForArray(latex);
-                for(ArrayList<String> e:questao.getResolucao()){
-                    for(String b: e){
-                        Log.d("Texto", b);
-                    }
-                }
-                if (questao.getResolucao().size() == 1) {
-                    questao.salvar();
-                    Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
-                    Toast.makeText(CadastrarResolucao.this, "Cadastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
+                if (latex == null) {
+                    aviso();
+                } else {
+                    if (questao.getResolucao().size() == 1) {
+                        questao.salvar();
+                        Intent intent = new Intent(CadastrarResolucao.this, MenuProfessor.class);
+                        Toast.makeText(CadastrarResolucao.this, "Cadastro realizado com sucesso\n retomando ao menu", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
                     } else {
-                      atualizarBanco();
+                        atualizarBanco();
+                    }
                 }
 
             }
         });
     }
-
+    private void aviso() {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarResolucao.this);
+        alerta.setTitle("Atenção").setMessage("Por favor veja se tem algum campo incorreto");
+        alerta.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                onStop();
+            }
+        });
+        alerta.create().show();
+    }
     public void validarPermissao() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -165,7 +179,7 @@ public class CadastrarResolucao extends AppCompatActivity {
 
         imageFile = new File(realPath);
         Uri uriFromPath = Uri.fromFile(imageFile);
-        String resultFile = realPath.substring(realPath.lastIndexOf(System.getProperty("file.separator"))+1,realPath.length());
+        String resultFile = realPath.substring(realPath.lastIndexOf(System.getProperty("file.separator")) + 1, realPath.length());
         // you have two ways to display selected image
 
         // ( 1 ) imageView.setImageURI(uriFromPath);
@@ -177,9 +191,13 @@ public class CadastrarResolucao extends AppCompatActivity {
                 DetectionResult detectionResult = new ProcessSingleImageTask().execute(imageFile).get();
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
-                String test = loadLocalContent();
-                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
-                imagemResolucao.setImageBitmap(bitmapReduzido);
+                if (latex.equals("")) {
+                    Toast.makeText(this, "Erro ao ler a imagem...\n Por favor verique que o cálculo está aparecendo ou tire outra foto ", Toast.LENGTH_SHORT).show();
+                } else {
+                    String test = loadLocalContent();
+                    Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                    imagemResolucao.setImageBitmap(bitmapReduzido);
+                }
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -257,13 +275,13 @@ public class CadastrarResolucao extends AppCompatActivity {
         try {
             in = assetManager.open(filename);
             File cloneFile = new File("/data/data/" + getPackageName() + "/" + filename);
-            if(cloneFile.exists()) return cloneFile;
+            if (cloneFile.exists()) return cloneFile;
 
             out = new FileOutputStream(cloneFile);
 
             byte[] buffer = new byte[1024];
             int read;
-            while((read = in.read(buffer)) != -1) {
+            while ((read = in.read(buffer)) != -1) {
                 out.write(buffer, 0, read);
             }
             in.close();
@@ -273,14 +291,16 @@ public class CadastrarResolucao extends AppCompatActivity {
             return cloneFile;
 
         } catch (Exception e) {
-            Log.d("aa",e.getMessage());
+            Log.d("aa", e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
 
-    /**Parte de processamento de texto
-     * Por favor não mexa*/
+    /**
+     * Parte de processamento de texto
+     * Por favor não mexa
+     */
 
     public String loadLocalContent() {
         mWebView.setVisibility(View.VISIBLE);
@@ -328,32 +348,33 @@ public class CadastrarResolucao extends AppCompatActivity {
         return latex;
     }
 
-    public String procuraP(String p){
-        String aux=null;
-        for(int i=0;i<p.length();i++){
-            if(p.charAt(i)=='<' && p.charAt(i+1)=='p' && p.charAt(i+2)=='>'){
-                aux = p.substring(0,i+3);
-                aux+="\\[ "+latex+" \\]";
+    public String procuraP(String p) {
+        String aux = null;
+        for (int i = 0; i < p.length(); i++) {
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == 'p' && p.charAt(i + 2) == '>') {
+                aux = p.substring(0, i + 3);
+                aux += "\\[ " + latex + " \\]";
             }
-            if(p.charAt(i)=='<' && p.charAt(i+1)=='/' && p.charAt(i+2)=='p' && p.charAt(i+3)=='>'){
-                aux+=p.substring(i,p.length());
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == '/' && p.charAt(i + 2) == 'p' && p.charAt(i + 3) == '>') {
+                aux += p.substring(i, p.length());
             }
         }
-        if(aux!=null){
-            Log.d("NOVO HTML",aux);
+        if (aux != null) {
+            Log.d("NOVO HTML", aux);
             return aux;
-        }else{
+        } else {
             return "TEXT NOT FOUND";
         }
     }
+
     public String localHTML(Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         InputStream json;
         try {
-            if(context.getAssets().open("test/index.html")==null){
-                Log.d("Dont","Existe");
-            }else{
-                Log.w("Funcionou","oooooooooooo");
+            if (context.getAssets().open("test/index.html") == null) {
+                Log.d("Dont", "Existe");
+            } else {
+                Log.w("Funcionou", "oooooooooooo");
             }
             json = context.getAssets().open("test/index.html");
             BufferedReader in = new BufferedReader(new InputStreamReader(json));

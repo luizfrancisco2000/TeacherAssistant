@@ -10,27 +10,30 @@
     android:orientation="vertical"
     android:layout_weight="1">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5">//Esse Layout pesa 50% do Layout total
+        android:layout_weight="0.5"
+        android:orientation="horizontal">//Esse Layout pesa 50% do Layout total
 
         <Button
             android:id="@+id/corrigirQuestaoProfessor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:background="@drawable/corrigir" />
+            android:layout_gravity="bottom"
+            android:background="@drawable/corrigirquestao"/>
 
         <Button
             android:id="@+id/cadastrarQuestaoProfessor"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:background="@drawable/cadastrarquestao" />
+            android:background="@drawable/cad33" />
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
