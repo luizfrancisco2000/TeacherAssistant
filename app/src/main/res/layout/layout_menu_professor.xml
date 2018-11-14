@@ -11,24 +11,25 @@
     android:layout_weight="1">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:orientation="horizontal">//Esse Layout pesa 50% do Layout total
+        android:layout_weight="0.5">//Esse Layout pesa 50% do Layout total
 
         <Button
             android:id="@+id/corrigirQuestaoProfessor"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+
             android:layout_weight="0.5"
-            android:text="Corrigir Questões" />
+            android:background="@drawable/corrigir" />
 
         <Button
             android:id="@+id/cadastrarQuestaoProfessor"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="Cadastrar Questões" />
+            android:background="@drawable/cadastrarquestao" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,14 +43,15 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="Fórum" />
+            android:layout_gravity="bottom"
+            android:background="@drawable/forum"/>
 
         <Button
             android:id="@+id/exercicioProfessor"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="Lista de Exercício" />
+            android:background="@drawable/lista"/>
 
     </LinearLayout>
 
