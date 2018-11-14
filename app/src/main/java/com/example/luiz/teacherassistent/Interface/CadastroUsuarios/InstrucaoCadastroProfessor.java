@@ -1,6 +1,6 @@
 package com.example.luiz.teacherassistent.Interface.CadastroUsuarios;
 
-import android.content.ClipData;
+
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,26 +26,23 @@ public class InstrucaoCadastroProfessor extends AppCompatActivity {
             email.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("email",email.getText());
-                    Toast.makeText(InstrucaoCadastroProfessor.this, "Campo Copiado!", Toast.LENGTH_SHORT).show();
-                    /*TextView tv;
-                    String stringYouExtracted = tv.getText().toString();
-                    int startIndex = tv.getSelectionStart();
-                    int endIndex = tv.getSelectionEnd();
-                    stringYouExtracted = stringYouExtracted.subString(startIndex, endIndex);
+                    /*ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("email",email.getText());*/
+                    String stringYouExtracted = email.getText().toString();
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    clipboard.setText(stringYouExtracted);
-
 
                     if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                        android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        clipboard.setText(stringYouExtracted);
+                        android.text.ClipboardManager clipboarder = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        clipboarder.setText(stringYouExtracted);
+
+                        Toast.makeText(InstrucaoCadastroProfessor.this, "Campo Copiado!", Toast.LENGTH_SHORT).show();
                     } else {
-                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        android.content.ClipboardManager clipboarder = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", stringYouExtracted);
-                                clipboard.setPrimaryClip(clip);
-                    }*/
+                                clipboarder.setPrimaryClip(clip);
+
+                        Toast.makeText(InstrucaoCadastroProfessor.this, "Campo Copiado!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             continuar.setOnClickListener(new View.OnClickListener() {

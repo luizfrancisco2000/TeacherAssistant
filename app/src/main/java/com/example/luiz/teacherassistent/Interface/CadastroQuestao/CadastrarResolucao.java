@@ -178,6 +178,8 @@ public class CadastrarResolucao extends AppCompatActivity {
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
                 String test = loadLocalContent();
+                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                imagemResolucao.setImageBitmap(bitmapReduzido);
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -188,7 +190,6 @@ public class CadastrarResolucao extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        imagemResolucao.setImageBitmap(bitmap);
 
         Log.d("HMKCODE", "Build.VERSION.SDK_INT:" + sdk);
         Log.d("HMKCODE", "URI Path:" + uriPath);

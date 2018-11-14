@@ -153,6 +153,9 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
                 String test = loadLocalContent();
+
+                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                fotoResolucaoAluno.setImageBitmap(bitmapReduzido);
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -163,7 +166,6 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        fotoResolucaoAluno.setImageBitmap(bitmap);
 
         Log.d("HMKCODE", "Build.VERSION.SDK_INT:" + sdk);
         Log.d("HMKCODE", "URI Path:" + uriPath);

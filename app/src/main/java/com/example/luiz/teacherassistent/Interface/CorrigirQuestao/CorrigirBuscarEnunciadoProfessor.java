@@ -100,6 +100,9 @@ public class CorrigirBuscarEnunciadoProfessor extends AppCompatActivity{
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
                 String test = loadLocalContent();
+
+                Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                imagemEnunciado.setImageBitmap(bitmapReduzido);
             } else {
                 Log.d("a", "arquivo não existe");
             }
@@ -110,7 +113,6 @@ public class CorrigirBuscarEnunciadoProfessor extends AppCompatActivity{
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        imagemEnunciado.setImageBitmap(bitmap);
 
         Log.d("HMKCODE", "Build.VERSION.SDK_INT:" + sdk);
         Log.d("HMKCODE", "URI Path:" + uriPath);
