@@ -67,7 +67,7 @@ public class CorrigirBuscarResolucaoProfessor extends AppCompatActivity {
         Log.d("Teste",correcao.getResolucaoCorreta().get(0).toString());
 
         mWebView = (WebView) findViewById(R.id.webViewRes);
-        buttonEscolherFoto = (Button) findViewById(R.id.fotoEnuciado);
+        buttonEscolherFoto = (Button) findViewById(R.id.fotoEnunciado);
         fotoResolucaoAluno = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
         buttonEscolherFoto.setOnClickListener(new View.OnClickListener() {
             @Override

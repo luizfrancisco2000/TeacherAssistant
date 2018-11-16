@@ -54,4 +54,11 @@
         <item>Função Logarítmica</item>
         <item>Estudo do triângulo</item>
     </string-array>
+    <string-array name="insercao">
+        <item>Via teclado</item>
+        <item>Via foto</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

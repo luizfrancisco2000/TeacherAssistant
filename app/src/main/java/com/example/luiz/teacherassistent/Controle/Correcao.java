@@ -71,10 +71,13 @@ public class Correcao {
                    if (correta.get(i).equals(resolucaoUser.get(j))) {
                        certo = true;
                    }else{
-                       if(auxiliar < j || auxiliar>1000){
+                       if(auxiliar > j){
                            auxiliar=j;
                            certo = false;
-                            erro=""+(j+1);
+                           erro=""+(j+1);
+                           j++;
+                       }else{
+
                        }
                    }
                    Log.d("SITUACAO", String.valueOf(certo));

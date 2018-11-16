@@ -96,7 +96,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.layout_enunciado);
-        fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
+        fotoEnunciado = (Button) findViewById(R.id.fotoEnunciado);
         editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
         continuarResolucao = (FloatingActionButton) findViewById(R.id.ContinuarProcessoCad);
         imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
