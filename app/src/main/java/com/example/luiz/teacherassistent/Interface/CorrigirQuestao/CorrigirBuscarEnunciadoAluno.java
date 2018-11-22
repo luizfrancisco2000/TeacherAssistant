@@ -113,13 +113,13 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         disciplina = (TextView) findViewById(R.id.DisciplinaEnunciado);
         assuntos = (Spinner) findViewById(R.id.assunto);
         validarPermissao();
-        if(!ConnectionTest.isOnline()){
+        if(ConnectionTest.isOnline()){
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
             alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
             alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(MenuPrincipal.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         finishAffinity();
                     }
@@ -199,11 +199,9 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                 if(fotos){
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
-                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, ""+"Errado", Toast.LENGTH_SHORT).show();
                     Log.d("Errado", latex);
                 }else{
                     String texto = EnunciadoFragment.newEdit.getText().toString();
-                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, ""+texto, Toast.LENGTH_SHORT).show();
                     Log.d("Teste", "onClick: "+texto);
                     questao.setEnunciado(texto);
                 }

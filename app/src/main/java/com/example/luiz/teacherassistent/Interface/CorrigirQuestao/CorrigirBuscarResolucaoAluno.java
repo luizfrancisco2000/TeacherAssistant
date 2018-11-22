@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,7 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
     private RadioButton radioTeclado;
     private File imageFile;
     private String realPath;
+    private ProgressBar barrinha;
     private String latex;
     private boolean fotos;
     private final int  PERMISSAO_REQUEST =2;
@@ -72,6 +74,7 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         ContextParse.setContext(getApplicationContext());
         validarPermissao();
         concluir = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
+        barrinha = findViewById(R.id.barrinhares);
         radioFoto = (RadioButton) findViewById(R.id.radioFotoR);
         final FrameLayout frame = (FrameLayout) findViewById(R.id.containerForFragmentR);
         radioTeclado = (RadioButton) findViewById(R.id.radioTecladoR);
@@ -174,6 +177,8 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
                 }
 
 */
+                barrinha.setVisibility(View.VISIBLE);
+                barrinha.setActivated(true);
                 if(fotos){
                     resposta = FotoFragment.latex;
                 }else{

@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -96,6 +97,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
     private RadioGroup materiasRadio, tipoInsersao;
     private TextView disciplina;
     private AlertDialog alert;
+    private ProgressBar barrinha;
     //constantes e variaveis
     private final int PERMISSAO_REQUEST = 2;
     Questao questao;
@@ -118,6 +120,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
       //  editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
         continuarCadastro = (FloatingActionButton) findViewById(R.id.ContinuarProcessoCad);
        // imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
+        barrinha = findViewById(R.id.barrinhaenunc);
         radioFisica = (RadioButton) findViewById(R.id.radioFisica);
         radioMatematica = (RadioButton) findViewById(R.id.radioMatematica);
         radioQuimica = (RadioButton) findViewById(R.id.radioQuimica);
@@ -235,16 +238,14 @@ public class CadastrarEnunciado extends AppCompatActivity {
         continuarCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                barrinha.setVisibility(View.VISIBLE);
+                barrinha.setActivated(true);
                 questao = new Questao();
                 if(fotos){
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
-                    Toast.makeText(CadastrarEnunciado.this, ""+"Errado", Toast.LENGTH_SHORT).show();
-                    Log.d("Errado", latex);
                 }else{
                     String texto = EnunciadoFragment.newEdit.getText().toString();
-                    Toast.makeText(CadastrarEnunciado.this, ""+texto, Toast.LENGTH_SHORT).show();
-                    Log.d("Teste", "onClick: "+texto);
                     questao.setEnunciado(texto);
                 }
                 //professor.setAtivo(false);
@@ -267,8 +268,10 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 }
                 Log.d("GORDO", questao.getEnunciado());
                 if (questao.getAssunto() == null || questao.getEnunciado() == null || questao.getMateria() == null) {
+                    Log.d("Para ae", questao.getAssunto());
                     aviso();
                 } else {
+                    Log.d("eee", questao.getAssunto());
                     procurarQuestao();
                 }
             }
@@ -288,23 +291,6 @@ public class CadastrarEnunciado extends AppCompatActivity {
     }
 
 
-    private void erroDeBusca(Questao questao) {
-        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-        alerta.setTitle("Atenção").setMessage("Questao já cadsatrada" + questao.getMateria() + "\nDeseja continuar?");
-        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                startActivity(intent);
-            }
-        });
-        alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-    }
 
 
     private void procurarQuestao() {
@@ -316,6 +302,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 try {
                     if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
                         if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
+                            Log.d("Repetido","reapet");
                             AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
                             alerta.setTitle("Atenção").setMessage("Questao já cadsatrada: " + questao.getMateria() + "\n Deseja continuar?");
                             alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -333,19 +320,24 @@ public class CadastrarEnunciado extends AppCompatActivity {
                                     questao = new Questao();
                                 }
                             });
-                            alert = alerta.create();
-                            alert.show();
+                            alerta.create().show();
+                        }else{
+                            Log.d("Caralho","oq");
+                            abrirTelaPrincipal();
                         }
                     } else {
+                        Log.d("Repetido","oq");
                         abrirTelaPrincipal();
                     }
                 } catch (Exception e) {
+                    Log.d("Repetido","oq");
                     abrirTelaPrincipal();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.d("Cancel","Serio?");
 
             }
         });
@@ -354,6 +346,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
 
     private void abrirTelaPrincipal() {
         Questao.setInstance(questao);
+        Log.d("passar","reso");
         Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
         startActivity(intent);
     }

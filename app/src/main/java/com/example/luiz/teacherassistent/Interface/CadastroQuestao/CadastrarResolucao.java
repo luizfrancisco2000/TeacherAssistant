@@ -155,11 +155,13 @@ public class CadastrarResolucao extends AppCompatActivity {
         concluirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String resposta="";
+                String resposta;
                 if(fotos){
                     resposta = FotoFragment.latex;
+                    Log.d("Errado", latex);
                 }else{
-                    resposta = EnunciadoFragment.texto;
+                    resposta = EnunciadoFragment.newEdit.getText().toString();
+                    Log.d("Teste", "onClick: "+resposta);
                 }
                 questao.convertStringForArray(resposta);
                 if (resposta == "") {
