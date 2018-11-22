@@ -16,7 +16,8 @@ import com.example.luiz.teacherassistent.R;
 public class EnunciadoFragment extends Fragment implements View.OnFocusChangeListener{
 
     private EditText editEnunciado;
-    public static String texto;
+    public static EditText newEdit;
+    public static String texto="";
     public EnunciadoFragment() {
         // Required empty public constructor
     }
@@ -28,6 +29,7 @@ public class EnunciadoFragment extends Fragment implements View.OnFocusChangeLis
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_enunciado, container, false);
         editEnunciado = (EditText) view.findViewById(R.id.enunciadoEditText);
+        newEdit = editEnunciado;
         editEnunciado.setOnFocusChangeListener(this);
         return view;
     }

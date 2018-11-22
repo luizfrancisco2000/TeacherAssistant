@@ -179,6 +179,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
+                fotos=false;
             }
         });
         radioFoto.setOnClickListener(new View.OnClickListener() {
@@ -216,7 +217,9 @@ public class CadastrarEnunciado extends AppCompatActivity {
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
                 }else{
-                    questao.setEnunciado(EnunciadoFragment.texto);
+                    String texto = EnunciadoFragment.newEdit.getText().toString();
+                    Log.d("Teste", "onClick: "+texto);
+                    questao.setEnunciado(texto);
                 }
                 //professor.setAtivo(false);
                 if (radioFisica.isChecked()) {
@@ -236,6 +239,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
                     disciplina.setTextColor(Color.RED);
 
                 }
+                Log.d("GORDO", questao.getEnunciado());
                 if (questao.getAssunto() == null || questao.getEnunciado() == null || questao.getMateria() == null) {
                     aviso();
                 } else {
