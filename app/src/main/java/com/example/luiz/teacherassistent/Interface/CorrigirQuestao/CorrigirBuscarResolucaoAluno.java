@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Correcao;
+import com.example.luiz.teacherassistent.Helper.ConnectionTest;
 import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
@@ -74,6 +75,26 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
         radioFoto = (RadioButton) findViewById(R.id.radioFotoR);
         final FrameLayout frame = (FrameLayout) findViewById(R.id.containerForFragmentR);
         radioTeclado = (RadioButton) findViewById(R.id.radioTecladoR);
+        if(ConnectionTest.isOnline()){
+            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+            alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
+            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(CorrigirBuscarResolucaoAluno.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity();
+                    }
+                }
+            });
+            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            alerta.create().show();
+        }
         radioFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

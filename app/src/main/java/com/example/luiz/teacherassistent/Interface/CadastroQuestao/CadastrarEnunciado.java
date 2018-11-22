@@ -41,11 +41,13 @@ import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Helper.ConnectionTest;
 import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
 import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
+import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
 import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumProfessor;
 import com.example.luiz.teacherassistent.Interface.Fragments.EnunciadoFragment;
 import com.example.luiz.teacherassistent.Interface.Fragments.FotoFragment;
@@ -124,6 +126,26 @@ public class CadastrarEnunciado extends AppCompatActivity {
         materiasRadio = (RadioGroup) findViewById(R.id.radioMaterias);
         disciplina = (TextView) findViewById(R.id.DisciplinaProf);
         assuntos = (Spinner) findViewById(R.id.assunto);
+        if(ConnectionTest.isOnline()){
+            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+            alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
+            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(CadastrarEnunciado.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity();
+                    }
+                }
+            });
+            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            alerta.create().show();
+        }
         final FrameLayout frame = (FrameLayout) findViewById(R.id.containerForFragment);
       //  mWebView = (WebView) findViewById(R.id.webViewEnun);
        /* fotoEnunciado.setOnClickListener(new View.OnClickListener() {

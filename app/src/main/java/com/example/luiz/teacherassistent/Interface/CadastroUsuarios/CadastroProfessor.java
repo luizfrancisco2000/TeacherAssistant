@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Helper.Base64Custom;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.Preferencias;
 import com.example.luiz.teacherassistent.R;
 import com.example.luiz.teacherassistent.Servidor.ConfiguracaoDataBase;
@@ -69,6 +70,7 @@ public class CadastroProfessor extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_cadastrar_professor);
+        ContextParse.setContext(getApplicationContext());
         nomeProfessor = (EditText) findViewById(R.id.nomeProfessor);
         senhaProfessor  = (EditText)findViewById(R.id.senhaProfessor);
         loginProfessor  = (EditText) findViewById(R.id.loginProfessor);

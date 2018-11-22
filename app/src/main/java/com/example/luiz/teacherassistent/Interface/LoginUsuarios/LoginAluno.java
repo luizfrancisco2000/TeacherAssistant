@@ -112,6 +112,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Aluno;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuAluno;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
 import com.example.luiz.teacherassistent.R;
@@ -143,6 +144,7 @@ public class LoginAluno extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    ContextParse.setContext(getApplicationContext());
                     AuthResult authResult = task.getResult();
                     FirebaseUser usuarioLogado = authResult.getUser();
                     Intent intent  = new Intent(LoginAluno.this, MenuAluno.class);

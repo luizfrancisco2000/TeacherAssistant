@@ -1,6 +1,7 @@
 package com.example.luiz.teacherassistent.Interface.CorrigirQuestao;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,10 +27,12 @@ import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Helper.ConnectionTest;
 import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
+import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuAluno;
 import com.example.luiz.teacherassistent.R;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -65,7 +69,26 @@ public class CorrigirBuscarResolucaoProfessor extends AppCompatActivity {
         concluir = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
         correcao = Correcao.getInstance();
         Log.d("Teste",correcao.getResolucaoCorreta().get(0).toString());
-
+        if(ConnectionTest.isOnline()){
+            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+            alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
+            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(CorrigirBuscarResolucaoProfessor.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity();
+                    }
+                }
+            });
+            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            alerta.create().show();
+        }
         buttonEscolherFoto = (Button) findViewById(R.id.fotoEnunciado);
         fotoResolucaoAluno = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
         buttonEscolherFoto.setOnClickListener(new View.OnClickListener() {

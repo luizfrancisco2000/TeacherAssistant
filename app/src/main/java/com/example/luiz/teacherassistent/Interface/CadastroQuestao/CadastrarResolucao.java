@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.example.luiz.teacherassistent.Helper.ConnectionTest;
 import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 
@@ -43,6 +44,7 @@ import com.example.luiz.teacherassistent.Helper.Base64Custom;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
 import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
+import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
 import com.example.luiz.teacherassistent.Interface.Fragments.EnunciadoFragment;
 import com.example.luiz.teacherassistent.Interface.Fragments.FotoFragment;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
@@ -106,6 +108,26 @@ public class CadastrarResolucao extends AppCompatActivity {
         setContentView(R.layout.layout_resolucao);
         ContextParse.setContext(getApplicationContext());
         validarPermissao();
+        if(ConnectionTest.isOnline()){
+            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+            alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
+            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(CadastrarResolucao.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity();
+                    }
+                }
+            });
+            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            alerta.create().show();
+        }
         concluirCadastro = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
         questao = Questao.getInstance();
         radioFoto = (RadioButton) findViewById(R.id.radioFotoR);

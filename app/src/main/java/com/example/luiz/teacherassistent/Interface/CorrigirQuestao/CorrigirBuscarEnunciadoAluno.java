@@ -40,6 +40,7 @@ import com.example.luiz.teacherassistent.Controle.Aluno;
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Helper.ConnectionTest;
 import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
@@ -47,6 +48,7 @@ import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
 import com.example.luiz.teacherassistent.Interface.CadastroQuestao.CadastrarEnunciado;
 import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
 import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.InstrucaoCadastroProfessor;
+import com.example.luiz.teacherassistent.Interface.ForumUsuarios.ForumAluno;
 import com.example.luiz.teacherassistent.Interface.Fragments.EnunciadoFragment;
 import com.example.luiz.teacherassistent.Interface.Fragments.FotoFragment;
 import com.example.luiz.teacherassistent.Interface.LoginUsuarios.LoginProfessor;
@@ -111,6 +113,26 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         disciplina = (TextView) findViewById(R.id.DisciplinaEnunciado);
         assuntos = (Spinner) findViewById(R.id.assunto);
         validarPermissao();
+        if(!ConnectionTest.isOnline()){
+            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+            alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
+            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, "Sessão Finalizada... \n Retornando ao menu principal", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity();
+                    }
+                }
+            });
+            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            alerta.create().show();
+        }
         if (radioFisica.isChecked()) {
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CorrigirBuscarEnunciadoAluno.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Helper.Base64Custom;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.CadastroProfessor;
 import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.InstrucaoCadastroProfessor;
 import com.example.luiz.teacherassistent.Interface.Menus.MenuProfessor;
@@ -43,6 +44,7 @@ public class LoginProfessor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_login);
+        ContextParse.setContext(getApplicationContext());
         buttonCancelar = (Button) findViewById(R.id.cancelar);
         buttonConfirmar = (Button) findViewById(R.id.confirmar);
         loginprofessor = (EditText) findViewById(R.id.login);
