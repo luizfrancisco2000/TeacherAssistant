@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Correcao;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
@@ -67,6 +68,7 @@ public class CorrigirBuscarResolucaoAluno extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_resolucao);
+        ContextParse.setContext(getApplicationContext());
         validarPermissao();
         concluir = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
         radioFoto = (RadioButton) findViewById(R.id.radioFotoR);

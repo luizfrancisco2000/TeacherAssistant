@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 
 import android.os.Build;
@@ -103,6 +104,7 @@ public class CadastrarResolucao extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_resolucao);
+        ContextParse.setContext(getApplicationContext());
         validarPermissao();
         concluirCadastro = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
         questao = Questao.getInstance();

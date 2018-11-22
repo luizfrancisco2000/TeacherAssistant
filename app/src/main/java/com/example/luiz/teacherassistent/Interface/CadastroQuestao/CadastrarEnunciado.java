@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
@@ -108,8 +109,8 @@ public class CadastrarEnunciado extends AppCompatActivity {
     protected void onCreate(final Bundle onSaveInstanceState) {
         super.onCreate(onSaveInstanceState);
         super.setContentView(R.layout.layout_enunciado);
-        contextOfApplication = getApplicationContext();
-        activityCompat = getParent();
+
+        ContextParse.setContext(getApplicationContext());
         fotos=false;
       //  fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
       //  editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
@@ -216,8 +217,11 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 if(fotos){
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
+                    Toast.makeText(CadastrarEnunciado.this, ""+"Errado", Toast.LENGTH_SHORT).show();
+                    Log.d("Errado", latex);
                 }else{
                     String texto = EnunciadoFragment.newEdit.getText().toString();
+                    Toast.makeText(CadastrarEnunciado.this, ""+texto, Toast.LENGTH_SHORT).show();
                     Log.d("Teste", "onClick: "+texto);
                     questao.setEnunciado(texto);
                 }
@@ -337,16 +341,5 @@ public class CadastrarEnunciado extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerForFragment, fragment, tag);
         fragmentTransaction.commit();
-    }
-    public static Context contextOfApplication;
-    public static Context getContextOfApplication()
-    {
-        return contextOfApplication;
-    }
-
-    public static Activity activityCompat;
-    public static Activity getActivityCompat()
-    {
-        return activityCompat;
     }
 }

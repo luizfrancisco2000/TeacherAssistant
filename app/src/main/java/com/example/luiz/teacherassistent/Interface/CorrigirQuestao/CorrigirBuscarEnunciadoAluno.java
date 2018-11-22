@@ -40,9 +40,11 @@ import com.example.luiz.teacherassistent.Controle.Aluno;
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Controle.Professor;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
+import com.example.luiz.teacherassistent.Interface.CadastroQuestao.CadastrarEnunciado;
 import com.example.luiz.teacherassistent.Interface.CorrigirQuestao.CorrigirBuscarEnunciadoAluno;
 import com.example.luiz.teacherassistent.Interface.CadastroUsuarios.InstrucaoCadastroProfessor;
 import com.example.luiz.teacherassistent.Interface.Fragments.EnunciadoFragment;
@@ -92,10 +94,12 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     private String latex;
     private boolean fotos;
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.layout_enunciado);
+        ContextParse.setContext(getApplicationContext());
         continuarResolucao = (FloatingActionButton) findViewById(R.id.ContinuarProcessoCad);
         radioFisica = (RadioButton) findViewById(R.id.radioFisica);
         radioMatematica = (RadioButton) findViewById(R.id.radioMatematica);
@@ -173,8 +177,13 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                 if(fotos){
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
+                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, ""+"Errado", Toast.LENGTH_SHORT).show();
+                    Log.d("Errado", latex);
                 }else{
-                    questao.setEnunciado(EnunciadoFragment.texto);
+                    String texto = EnunciadoFragment.newEdit.getText().toString();
+                    Toast.makeText(CorrigirBuscarEnunciadoAluno.this, ""+texto, Toast.LENGTH_SHORT).show();
+                    Log.d("Teste", "onClick: "+texto);
+                    questao.setEnunciado(texto);
                 }
                 if (radioFisica.isChecked()) {
                     questao.setMateria("fisica");

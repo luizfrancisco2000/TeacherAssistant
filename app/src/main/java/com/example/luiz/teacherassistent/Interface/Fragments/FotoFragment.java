@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
@@ -62,8 +63,7 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewGroup = container;
-        applicationContext = CadastrarEnunciado.getContextOfApplication();
-        application = CadastrarEnunciado.getActivityCompat();
+        applicationContext = ContextParse.getContext();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_foto, container, false);
         fotoEnunciado = (Button) view.findViewById(R.id.fotoEnunciado);

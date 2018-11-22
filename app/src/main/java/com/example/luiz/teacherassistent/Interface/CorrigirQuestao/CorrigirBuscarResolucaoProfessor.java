@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Controle.Correcao;
 import com.example.luiz.teacherassistent.Controle.Questao;
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
@@ -54,11 +55,13 @@ public class CorrigirBuscarResolucaoProfessor extends AppCompatActivity {
     private WebView mWebView;
     protected final int GALERIA_IMAGENS = 1;
     private final int  PERMISSAO_REQUEST =2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_resolucao);
         validarPermissao();
+        ContextParse.setContext(getApplicationContext());
         concluir = (FloatingActionButton) findViewById(R.id.ConcluirProcesso);
         correcao = Correcao.getInstance();
         Log.d("Teste",correcao.getResolucaoCorreta().get(0).toString());

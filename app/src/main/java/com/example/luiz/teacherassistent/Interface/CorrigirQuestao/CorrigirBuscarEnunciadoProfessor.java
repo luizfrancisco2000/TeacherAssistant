@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.luiz.teacherassistent.Helper.ContextParse;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
@@ -45,10 +46,13 @@ public class CorrigirBuscarEnunciadoProfessor extends AppCompatActivity{
     private String latex;
     private WebView mWebView;
     private Button fotoEnunciado;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.layout_enunciado);
+        ContextParse.setContext(getApplicationContext());
         fotoEnunciado = (Button) findViewById(R.id.fotoEnunciado);
         imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
         mWebView = (WebView) findViewById(R.id.webViewEnun);

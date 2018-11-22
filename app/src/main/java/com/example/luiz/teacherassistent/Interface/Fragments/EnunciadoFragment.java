@@ -22,7 +22,11 @@ public class EnunciadoFragment extends Fragment implements View.OnFocusChangeLis
         // Required empty public constructor
     }
 
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        editEnunciado.setOnFocusChangeListener(this);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
