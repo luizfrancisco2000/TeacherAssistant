@@ -21,41 +21,28 @@
             android:layout_height="wrap_content"
             android:text="Resolução: " />
 
-        <EditText
-            android:id="@+id/ResolucaoEdit"
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content" />
-        <TextView
+        <RadioGroup
+            android:id="@+id/radioInsercao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Texto Processado:"
-            android:textSize="18dp"
-            />
-
-        <WebView
-            android:id="@+id/webViewRes"
+            android:orientation="horizontal"
+            >
+            <RadioButton
+                android:id="@+id/radioFotoR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foto" />
+            <RadioButton
+                android:id="@+id/radioTecladoR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Teclado"/>
+        </RadioGroup>
+        <FrameLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/FotoResolucao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Foto" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Foto Selecionada: "
-            />
-
-        <ImageView
-            android:id="@+id/imageResourceID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/fotos" />
-
+            android:layout_height="fill_parent"
+            android:id="@+id/containerForFragmentR">
+        </FrameLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/ConcluirProcesso"
             android:layout_width="match_parent"

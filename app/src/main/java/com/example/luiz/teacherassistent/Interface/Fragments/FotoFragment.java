@@ -39,39 +39,40 @@ import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FotoFragment extends Fragment implements View.OnClickListener{
+public class FotoFragment extends Fragment implements View.OnClickListener {
 
-         private Button fotoEnunciado;
-        private String realPath;
-        private File imageFile;
-        private ViewGroup viewGroup;
-        private String latex;
-        private WebView mWebView;
-        private Activity activity;
-        private ImageView imagemEnunciado;
+    private Button fotoEnunciado;
+    private String realPath;
+    private File imageFile;
+    private ViewGroup viewGroup;
+    public static String latex;
+    private WebView mWebView;
+    private Activity activity;
+    private ImageView imagemEnunciado;
     private final int PERMISSAO_REQUEST = 2;
-        private Context applicationContext;
-        private Activity application;
-        public FotoFragment() {
-            // Required empty public constructor
-            Log.d("TESTE FRAGMENT","EAE");
-        }
+    private Context applicationContext;
+    private Activity application;
+
+    public FotoFragment() {
+        // Required empty public constructor
+        Log.d("TESTE FRAGMENT", "EAE");
+    }
 
     @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            viewGroup = container;
-            applicationContext = CadastrarEnunciado.getContextOfApplication();
-            application = CadastrarEnunciado.getActivityCompat();
-            // Inflate the layout for this fragment
-            View view = inflater.inflate(R.layout.fragment_foto, container, false);
-            fotoEnunciado = (Button) view.findViewById(R.id.fotoEnunciado);
-            imagemEnunciado = (ImageView) view.findViewById(R.id.fotoEnunciadoMostra);
-            mWebView = (WebView) view.findViewById(R.id.webViewEnun);
-            fotoEnunciado.setOnClickListener(this);
-            return view;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        viewGroup = container;
+        applicationContext = CadastrarEnunciado.getContextOfApplication();
+        application = CadastrarEnunciado.getActivityCompat();
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_foto, container, false);
+        fotoEnunciado = (Button) view.findViewById(R.id.fotoEnunciado);
+        imagemEnunciado = (ImageView) view.findViewById(R.id.fotoEnunciadoMostra);
+        mWebView = (WebView) view.findViewById(R.id.webViewEnun);
+        fotoEnunciado.setOnClickListener(this);
+        return view;
 
-        }
+    }
 
     /**
      * Parte de processamento de texto
@@ -121,7 +122,6 @@ public class FotoFragment extends Fragment implements View.OnClickListener{
                     String test = loadLocalContent();
                     Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
                     imagemEnunciado.setImageBitmap(bitmapReduzido);
-                    CadastrarEnunciado.latex = latex;
                 }
             } else {
                 Log.d("a", "arquivo não existe");
@@ -246,8 +246,8 @@ public class FotoFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fotoEnunciado:{
-                Log.d("Click","CLICK");
+            case R.id.fotoEnunciado: {
+                Log.d("Click", "CLICK");
                 // 1. on Upload click call ACTION_GET_CONTENT intent
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 // 2. pick image only

@@ -76,7 +76,7 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class CadastrarEnunciado extends AppCompatActivity {
-    public static String latex;
+    private String latex;
     //botões
    // private Button fotoEnunciado;
   //  private EditText editEnunciado;
@@ -213,14 +213,14 @@ public class CadastrarEnunciado extends AppCompatActivity {
             public void onClick(View view) {
                 questao = new Questao();
                 if(fotos){
+                    latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
                 }else{
-                    questao.setEnunciado();
+                    questao.setEnunciado(EnunciadoFragment.texto);
                 }
                 //professor.setAtivo(false);
                 if (radioFisica.isChecked()) {
                     questao.setMateria("fisica");
-                    int aux;
                     questao.setAssunto(assuntos.getSelectedItem().toString());
 
                 } else if (radioMatematica.isChecked()) {
@@ -257,27 +257,6 @@ public class CadastrarEnunciado extends AppCompatActivity {
         alerta.create().show();
     }
 
-    public void buscarBancoDeDados() {
-        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        Log.d("Erro1", questao.getEnunciado());
-        mRef.child("questao").child(questao.getMateria()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Questao questao = dataSnapshot.getValue(Questao.class);
-                    erroDeBusca(questao);
-                } else {
-                    Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void erroDeBusca(Questao questao) {
         AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
