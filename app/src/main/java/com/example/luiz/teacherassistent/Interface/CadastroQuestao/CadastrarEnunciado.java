@@ -129,6 +129,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
         materiasRadio = (RadioGroup) findViewById(R.id.radioMaterias);
         disciplina = (TextView) findViewById(R.id.DisciplinaProf);
         assuntos = (Spinner) findViewById(R.id.assunto);
+        validarPermissao();
         if(ConnectionTest.isOnline()){
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
             alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
@@ -277,6 +278,17 @@ public class CadastrarEnunciado extends AppCompatActivity {
             }
         });
     }
+    public void validarPermissao() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSAO_REQUEST);
+            }
+        }
+
+    }
+
     private void aviso() {
         AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
         alerta.setTitle("Atenção").setMessage("Por favor veja se tem algum campo incorreto");
@@ -296,7 +308,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
     private void procurarQuestao() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
-                String.valueOf(questao.getAssunto())).addListenerForSingleValueEvent(new ValueEventListener() {
+                String.valueOf(questao.getAssunto())).child(questao.getEnunciado()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 try {

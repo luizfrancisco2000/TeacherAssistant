@@ -264,7 +264,8 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     public void buscar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
-                String.valueOf(questao.getAssunto())).addListenerForSingleValueEvent(new ValueEventListener() {
+                String.valueOf(questao.getAssunto())).child(
+                String.valueOf(questao.getEnunciado())).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 try {
