@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.luiz.teacherassistent.Helper.ContextParse;
+import com.example.luiz.teacherassistent.Helper.OCR.OCRClass;
 import com.example.luiz.teacherassistent.Helper.ProcessSingleImageTask;
 import com.example.luiz.teacherassistent.Helper.RealPathUtil;
 import com.example.luiz.teacherassistent.Helper.api.DetectionResult;
@@ -99,7 +100,6 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
             setTextViews(Build.VERSION.SDK_INT, data.getData().getPath(), realPath);
         }
     }
-
     private void setTextViews(int sdk, String uriPath, String realPath) {
 
         imageFile = new File(realPath);
@@ -117,9 +117,11 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
                 if (latex.equals("")) {
-                    Toast.makeText(applicationContext, "Erro ao ler a imagem...\n Por favor verique que o cálculo está aparecendo ou tire outra foto ", Toast.LENGTH_SHORT).show();
-                } else {
+                    OCRClass ocr = new OCRClass(applicationContext,bitmap);
+                    latex = String.valueOf(ocr.readToImage());
                     String test = loadLocalContent();
+                } else {
+
                     Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
                     imagemEnunciado.setImageBitmap(bitmapReduzido);
                 }

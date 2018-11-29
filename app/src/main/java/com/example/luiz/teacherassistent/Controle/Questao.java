@@ -28,7 +28,7 @@ public class Questao {
 
     public void salvar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(String.valueOf(getMateria())).child(String.valueOf(getAssunto())).child(getEnunciado()).setValue(this);
+        salve.child("questao").child(String.valueOf(getMateria())).child(String.valueOf(getAssunto())).child(getEnunciado().substring(0,15)).setValue(this);
     }
 
     @Exclude

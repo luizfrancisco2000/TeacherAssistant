@@ -225,6 +225,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 frame.removeAllViews();
                 EnunciadoFragment tecladoFragment = new EnunciadoFragment();
                 managerFragment(tecladoFragment,"TECLADO_FRAGMENT");
+                fotos=false;
             }
         });
         radioMatematica.setOnClickListener(new View.OnClickListener() {
@@ -308,7 +309,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
     private void procurarQuestao() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
-                String.valueOf(questao.getAssunto())).child(questao.getEnunciado()).addListenerForSingleValueEvent(new ValueEventListener() {
+                String.valueOf(questao.getAssunto())).child(questao.getEnunciado().substring(0,15)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 try {

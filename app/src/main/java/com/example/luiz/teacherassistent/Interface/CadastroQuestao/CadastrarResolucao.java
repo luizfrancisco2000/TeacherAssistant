@@ -205,7 +205,7 @@ public class CadastrarResolucao extends AppCompatActivity {
         DatabaseReference datbase = ConfiguracaoDataBase.getFirebase();
         Map<String, Object> questaoSalvar = questao.toMap();
         Map<String, Object> questaoAtualizacoes = new HashMap<>();
-        questaoAtualizacoes.put("/questao/" + questao.getMateria() + "/" + questao.getAssunto() + "/"+questao.getEnunciado(), questaoSalvar);
+        questaoAtualizacoes.put("/questao/" + questao.getMateria() + "/" + questao.getAssunto() + "/"+questao.getEnunciado().substring(0,15), questaoSalvar);
         datbase.updateChildren(questaoAtualizacoes).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
