@@ -73,6 +73,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -82,8 +83,8 @@ import java.util.concurrent.ExecutionException;
 public class CadastrarEnunciado extends AppCompatActivity {
     private String latex;
     //botões
-   // private Button fotoEnunciado;
-  //  private EditText editEnunciado;
+    // private Button fotoEnunciado;
+    //  private EditText editEnunciado;
     private Spinner assuntos;
     private Spinner insersao;
     private ImageView imagemEnunciado;
@@ -109,17 +110,18 @@ public class CadastrarEnunciado extends AppCompatActivity {
     private File imageFile;
     private WebView mWebView;
     private boolean fotos;
+
     @Override
     protected void onCreate(final Bundle onSaveInstanceState) {
         super.onCreate(onSaveInstanceState);
         super.setContentView(R.layout.layout_enunciado);
 
         ContextParse.setContext(getApplicationContext());
-        fotos=false;
-      //  fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
-      //  editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
+        fotos = false;
+        //  fotoEnunciado = (Button) findViewById(R.id.fotoEnuciado);
+        //  editEnunciado = (EditText) findViewById(R.id.enunciadoEditText);
         continuarCadastro = (FloatingActionButton) findViewById(R.id.ContinuarProcessoCad);
-       // imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
+        // imagemEnunciado = (ImageView) findViewById(R.id.fotoEnunciadoMostra);
         barrinha = findViewById(R.id.barrinhaenunc);
         radioFisica = (RadioButton) findViewById(R.id.radioFisica);
         radioMatematica = (RadioButton) findViewById(R.id.radioMatematica);
@@ -130,7 +132,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
         disciplina = (TextView) findViewById(R.id.DisciplinaProf);
         assuntos = (Spinner) findViewById(R.id.assunto);
         validarPermissao();
-        if(ConnectionTest.isOnline()){
+        if (ConnectionTest.isOnline()) {
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
             alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
             alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -151,7 +153,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
             alerta.create().show();
         }
         final FrameLayout frame = (FrameLayout) findViewById(R.id.containerForFragment);
-      //  mWebView = (WebView) findViewById(R.id.webViewEnun);
+        //  mWebView = (WebView) findViewById(R.id.webViewEnun);
        /* fotoEnunciado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +208,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CadastrarEnunciado.this, R.array.fisica_assuntos, R.layout.support_simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 assuntos.setAdapter(adapter);
-                fotos=false;
+                fotos = false;
             }
         });
         radioFoto.setOnClickListener(new View.OnClickListener() {
@@ -214,8 +216,8 @@ public class CadastrarEnunciado extends AppCompatActivity {
             public void onClick(View view) {
                 frame.removeAllViews();
                 FotoFragment fotoFragment = new FotoFragment();
-                managerFragment(fotoFragment,"FOTO_FRAGMENT");
-                fotos=true;
+                managerFragment(fotoFragment, "FOTO_FRAGMENT");
+                fotos = true;
 
             }
         });
@@ -224,8 +226,8 @@ public class CadastrarEnunciado extends AppCompatActivity {
             public void onClick(View view) {
                 frame.removeAllViews();
                 EnunciadoFragment tecladoFragment = new EnunciadoFragment();
-                managerFragment(tecladoFragment,"TECLADO_FRAGMENT");
-                fotos=false;
+                managerFragment(tecladoFragment, "TECLADO_FRAGMENT");
+                fotos = false;
             }
         });
         radioMatematica.setOnClickListener(new View.OnClickListener() {
@@ -243,10 +245,10 @@ public class CadastrarEnunciado extends AppCompatActivity {
                 barrinha.setVisibility(View.VISIBLE);
                 barrinha.setActivated(true);
                 questao = new Questao();
-                if(fotos){
+                if (fotos) {
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
-                }else{
+                } else {
                     String texto = EnunciadoFragment.newEdit.getText().toString();
                     questao.setEnunciado(texto);
                 }
@@ -279,6 +281,7 @@ public class CadastrarEnunciado extends AppCompatActivity {
             }
         });
     }
+
     public void validarPermissao() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -304,62 +307,91 @@ public class CadastrarEnunciado extends AppCompatActivity {
     }
 
 
-
-
     private void procurarQuestao() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
+        final int[] cont = new int[1];
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
-                String.valueOf(questao.getAssunto())).child(questao.getEnunciado().substring(0,15)).addListenerForSingleValueEvent(new ValueEventListener() {
+                String.valueOf(questao.getAssunto())).addValueEventListener(new ValueEventListener() {
+                    int cont1  = 0;
             @Override
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-                try {
-                    if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
-                        if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
-                            Log.d("Repetido","reapet");
-                            AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
-                            alerta.setTitle("Atenção").setMessage("Questao já cadsatrada: " + questao.getMateria() + "\n Deseja continuar?");
-                            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    questao = dataSnapshot.getValue(Questao.class);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    cont1++;
+                    for (int i = 0; i <= cont1; i++) {
+                        DatabaseReference salve1 = ConfiguracaoDataBase.getFirebase();
+                        salve1.child("questao").child(String.valueOf(questao.getMateria())).child(
+                                String.valueOf(questao.getAssunto())).child(String.valueOf(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(final DataSnapshot dataSnapshot) {
+                                try {
+                                    if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
+                                        if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
+                                            Log.d("Repetido", "reapet");
+                                            AlertDialog.Builder alerta = new AlertDialog.Builder(CadastrarEnunciado.this);
+                                            alerta.setTitle("Atenção").setMessage("Questao já cadsatrada: " + questao.getMateria() + "\n Deseja continuar?");
+                                            alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    questao = dataSnapshot.getValue(Questao.class);
+                                                    abrirTelaPrincipal();
+                                                }
+                                            });
+                                            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.cancel();
+                                                    latex = "";
+                                                    questao = new Questao();
+                                                }
+                                            });
+                                            alerta.create().show();
+                                        } else {
+                                            Log.d("Caralho", "oq");
+                                            questao.setCodigo(cont1);
+                                            abrirTelaPrincipal();
+                                        }
+                                    } else {
+                                        Log.d("Repetido", "oq");
+                                        questao.setCodigo(cont1);
+                                        abrirTelaPrincipal();
+                                    }
+                                } catch (Exception e) {
+                                    Log.d("Repetido", "oq");
+                                    questao.setCodigo(cont1);
                                     abrirTelaPrincipal();
                                 }
-                            });
-                            alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-                                    latex="";
-                                    questao = new Questao();
-                                }
-                            });
-                            alerta.create().show();
-                        }else{
-                            Log.d("Caralho","oq");
-                            abrirTelaPrincipal();
-                        }
-                    } else {
-                        Log.d("Repetido","oq");
-                        abrirTelaPrincipal();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d("Cancel", "Serio?");
+
+                            }
+                        });
                     }
-                } catch (Exception e) {
-                    Log.d("Repetido","oq");
+                }else{
+                    questao.setCodigo(0);
                     abrirTelaPrincipal();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("Cancel","Serio?");
 
             }
+
+
+
         });
+
+        Log.d("Cont", String.valueOf(cont[0]));
+
     }
 
 
     private void abrirTelaPrincipal() {
         Questao.setInstance(questao);
-        Log.d("passar","reso");
+        Log.d("passar", "reso");
         Intent intent = new Intent(CadastrarEnunciado.this, CadastrarResolucao.class);
         startActivity(intent);
     }

@@ -70,6 +70,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -113,7 +115,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         disciplina = (TextView) findViewById(R.id.DisciplinaEnunciado);
         assuntos = (Spinner) findViewById(R.id.assunto);
         validarPermissao();
-        if(ConnectionTest.isOnline()){
+        if (ConnectionTest.isOnline()) {
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
             alerta.setTitle("Atenção").setMessage("Dispositivc desconectado\n Deseja encerrar?");
             alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -159,7 +161,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
         radioTeclado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fotos=false;
+                fotos = false;
                 frame.removeAllViews();
                 EnunciadoFragment tecladoFragment = new EnunciadoFragment();
                 managerFragment(tecladoFragment, "TECLADO_FRAGMENT");
@@ -196,13 +198,13 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 questao = new Questao();
-                if(fotos){
+                if (fotos) {
                     latex = FotoFragment.latex;
                     questao.setEnunciado(latex);
                     Log.d("Errado", latex);
-                }else{
+                } else {
                     String texto = EnunciadoFragment.newEdit.getText().toString();
-                    Log.d("Teste", "onClick: "+texto);
+                    Log.d("Teste", "onClick: " + texto);
                     questao.setEnunciado(texto);
                 }
                 if (radioFisica.isChecked()) {
@@ -262,22 +264,61 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
     }
 
     public void buscar() {
+        final List<Questao> questaoList = new ArrayList<>();
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
         salve.child("questao").child(String.valueOf(questao.getMateria())).child(
-                String.valueOf(questao.getAssunto())).child(
-                String.valueOf(questao.getEnunciado().substring(0,15))).addListenerForSingleValueEvent(new ValueEventListener() {
+                String.valueOf(questao.getAssunto())).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-                try {
-                    if (dataSnapshot.exists()) {
-                        if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
-                            Log.d("Vamos lá", dataSnapshot.getValue(Questao.class).getEnunciado());
-                            if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
-                                correcao = dataSnapshot.getValue(Questao.class).exportResolucao();
-                                abrirTelaPrincipal();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                questaoList.add(dataSnapshot.getValue(Questao.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        int cont = 0;
+        try {
+            for (Questao q : questaoList) {
+                cont++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for(int i=0;i<=cont;i++){
+            salve.child("questao").child(String.valueOf(questao.getMateria())).child(
+                    String.valueOf(questao.getAssunto())).child(String.valueOf(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(final DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.exists()) {
+                            if (dataSnapshot.getValue(Questao.class).getEnunciado() != null) {
+                                Log.d("Vamos lá", dataSnapshot.getValue(Questao.class).getEnunciado());
+                                if (dataSnapshot.getValue(Questao.class).getEnunciado().equals(questao.getEnunciado())) {
+                                    correcao = dataSnapshot.getValue(Questao.class).exportResolucao();
+                                    abrirTelaPrincipal();
+                                } else {
+                                    AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
+                                    alerta.setTitle("Atenção").setMessage("Questao não cadastrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
+                                    alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                        }
+                                    });
+                                    alerta.create().show();
+                                }
                             } else {
                                 AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
-                                alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
+                                alerta.setTitle("Atenção").setMessage("Questao não cadastrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
                                 alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -311,7 +352,7 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                             });
                             alerta.create().show();
                         }
-                    } else {
+                    } catch (Exception e) {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
                         alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
                         alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -327,33 +368,16 @@ public class CorrigirBuscarEnunciadoAluno extends AppCompatActivity {
                                 dialogInterface.cancel();
                             }
                         });
-                        alerta.create().show();
                     }
-                } catch (Exception e) {
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(CorrigirBuscarEnunciadoAluno.this);
-                    alerta.setTitle("Atenção").setMessage("Questao não cadsatrada" + questao.getMateria() + "\nDeseja voltar ao menu?");
-                    alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(CorrigirBuscarEnunciadoAluno.this, MenuAluno.class);
-                            startActivity(intent);
-                        }
-                    });
-                    alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
+
                 }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }});
+        }
+        /* */
     }
 
     private void abrirTelaPrincipal() {

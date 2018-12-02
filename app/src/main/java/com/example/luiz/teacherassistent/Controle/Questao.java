@@ -17,7 +17,7 @@ import java.util.Map;
 public class Questao {
     private String materia;
     private String enunciado;
-    private String codigo;
+    private int codigo;
     private ArrayList<ArrayList<String>> resolucao;
     private String assunto;
     private static Questao getInstance;
@@ -28,13 +28,14 @@ public class Questao {
 
     public void salvar() {
         DatabaseReference salve = ConfiguracaoDataBase.getFirebase();
-        salve.child("questao").child(String.valueOf(getMateria())).child(String.valueOf(getAssunto())).child(getEnunciado().substring(0,15)).setValue(this);
+        salve.child("questao").child(String.valueOf(getMateria())).child(String.valueOf(getAssunto())).child(String.valueOf(codigo)).setValue(this);
     }
 
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> hashMapQuestao = new HashMap<>();
         hashMapQuestao.put("materia", getMateria());
+        hashMapQuestao.put("codigo", getCodigo());
         hashMapQuestao.put("enunciado", getEnunciado());
         hashMapQuestao.put("resolucao", getResolucao());
         return hashMapQuestao;
@@ -80,8 +81,12 @@ public class Questao {
         return enunciado;
     }
 
-    public String getCodigo() {
+    public int getCodigo() {
         return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public ArrayList<ArrayList<String>> getResolucao() {

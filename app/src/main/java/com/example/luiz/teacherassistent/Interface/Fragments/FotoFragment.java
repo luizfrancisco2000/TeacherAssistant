@@ -54,6 +54,7 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
     private final int PERMISSAO_REQUEST = 2;
     private Context applicationContext;
     private Activity application;
+    private boolean ocrMode;
 
     public FotoFragment() {
         // Required empty public constructor
@@ -100,6 +101,7 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
             setTextViews(Build.VERSION.SDK_INT, data.getData().getPath(), realPath);
         }
     }
+
     private void setTextViews(int sdk, String uriPath, String realPath) {
 
         imageFile = new File(realPath);
@@ -117,13 +119,16 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
                 Log.d("Mostra", detectionResult.latex);
                 latex = detectionResult.latex;
                 if (latex.equals("")) {
-                    OCRClass ocr = new OCRClass(applicationContext,bitmap);
+                    OCRClass ocr = new OCRClass(applicationContext, bitmap);
                     latex = String.valueOf(ocr.readToImage());
+                    ocrMode = true;
                     String test = loadLocalContent();
-                } else {
 
+                } else {
                     Bitmap bitmapReduzido = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
                     imagemEnunciado.setImageBitmap(bitmapReduzido);
+                    String test = loadLocalContent();
+                    ocrMode = false;
                 }
             } else {
                 Log.d("a", "arquivo não existe");
@@ -193,8 +198,13 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
         }
         String localURL = "file:///android_asset";
         String htmlString = localHTML(applicationContext);
-        String newHTML = procuraP(htmlString);
-        mWebView.loadDataWithBaseURL(localURL, newHTML, "text/html", "UTF-8", null);
+        if(ocrMode) {
+            String newHTML = procuraP1(htmlString);
+            mWebView.loadDataWithBaseURL(localURL, newHTML, "text/html", "UTF-8", null);
+        }else{
+            String newHTML = procuraP(htmlString);
+            mWebView.loadDataWithBaseURL(localURL, newHTML, "text/html", "UTF-8", null);
+        }
         return latex;
     }
 
@@ -217,14 +227,41 @@ public class FotoFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public String procuraP1(String p) {
+        String aux = null;
+        for (int i = 0; i < p.length(); i++) {
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == 'p' && p.charAt(i + 2) == '>') {
+                aux = p.substring(0, i + 3);
+                aux +=  latex;
+            }
+            if (p.charAt(i) == '<' && p.charAt(i + 1) == '/' && p.charAt(i + 2) == 'p' && p.charAt(i + 3) == '>') {
+                aux += p.substring(i, p.length());
+            }
+        }
+        if (aux != null) {
+            Log.d("NOVO HTML", aux);
+            return aux;
+        } else {
+            return "TEXT NOT FOUND";
+        }
+    }
+
     public String localHTML(Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         InputStream json;
         try {
-            if (context.getAssets().open("test/index.html") == null) {
-                Log.d("Dont", "Existe");
-            } else {
-                Log.w("Funcionou", "oooooooooooo");
+            if (!ocrMode) {
+                if (context.getAssets().open("test/index.html") == null) {
+                    Log.d("Dont", "Existe");
+                } else {
+                    Log.w("Funcionou", "oooooooooooo");
+                }
+            }else{
+                if (context.getAssets().open("test/examples.html") == null) {
+                    Log.d("Dont", "Existe");
+                } else {
+                    Log.w("Funcionou", "oooooooooooo");
+                }
             }
             json = context.getAssets().open("test/index.html");
             BufferedReader in = new BufferedReader(new InputStreamReader(json));
